@@ -9,7 +9,7 @@
 \alias{get_light}
 \alias{set_light_state}
 \alias{delete_light}
-\title{Hue API: light endpoints}
+\title{Hue API: lights endpoints}
 \usage{
 search_for_new_lights()
 
@@ -30,12 +30,15 @@ delete_light(id)
 
 \item{name}{name to give to a specific light}
 
-\item{...}{named parameters describing light state}
+\item{...}{named parameters describing light state (e.g. \code{on = TRUE})}
 }
 \value{
-Returns the response content, conveniently parsed into an R-friendly
-  data format.
+Requests with side effects invisibly return \code{TRUE} upon success.
+  GET requests return the response content, parsed into a list.
 }
 \description{
-Hue API: light endpoints
+Hue API: lights endpoints
+}
+\seealso{
+\url{https://developers.meethue.com/documentation/lights-api}
 }

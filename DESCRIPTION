@@ -1,0 +1,20 @@
+Package: PhilipsHue
+Type: Package
+Title: R Interface to the Philips Hue API
+Version: 0.1.0
+Author: Justin Brantley <fascinatingfingers@icloud.com>
+Maintainer: Justin Brantley <fascinatingfingers@icloud.com>
+URL: https://github.com/fascinatingfingers/PhilipsHue
+Description: The PhilipsHue package provides an R interface to the Philips Hue
+    API service, making it easy to make API calls and process the response into
+    convenient, R-friendly data structures. See
+    <https://developers.meethue.com/philips-hue-api> for the Philips Hue API
+    Documentation.
+License: GPL-3
+LazyData: true
+Imports:
+    httr,
+    jsonlite
+Suggests:
+    testthat
+RoxygenNote: 6.0.1

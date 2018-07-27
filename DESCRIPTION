@@ -12,5 +12,5 @@ Description: The PhilipsHue package provides an R interface to the Philips Hue
     Documentation.
 License: GPL-3
 LazyData: true
-Imports: methods, yaml, jsonlite, httr, purrr
+Imports: methods, yaml, httr, purrr
 RoxygenNote: 6.0.1

@@ -80,24 +80,14 @@ set_bridge_credentials <- function(ip, username) {
     message('Attempting to connect to bridge...')
     config <- httr::GET(paste(base_url, 'config', sep = '/'))
 
-    # If successful, set options...
-    if (config$status_code == 200) {
+    # Check for errors, then parse response
+    config <- process_httr_response(config)
+    message('...success!')
 
-        message('...success!')
+    # Set options
+    options(PhilipsHue = list(base_url = base_url, config = config))
 
-        config <- httr::content(config, 'text', encoding = 'UTF-8')
-        config <- jsonlite::fromJSON(config, simplifyVector = FALSE)
-
-        options(PhilipsHue = list(base_url = base_url, config = config))
-
-        return(invisible(TRUE))
-
-    # ...otherwise throw an error
-    } else {
-
-        stop('Unable to connect to bridge')
-
-    }
+    return(invisible(TRUE))
 }
 
 #' @rdname set_bridge_credentials

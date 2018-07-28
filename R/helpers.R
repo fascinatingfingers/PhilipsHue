@@ -113,3 +113,31 @@ bridge_url <- function(...) {
 
     return(paste(base_url, ..., sep = '/'))
 }
+
+#' Rule Helpers
+#'
+#' @param address path to attribute or resource
+#' @param operator one of: eq, gt, lt, dx, ddx, stable, not stable, in, not in
+#' @param value the value a condition will compare against
+#' @param method the HTTP method used to send the body to the given address
+#' @param ... named parameters to include in action body
+#'
+#' @return Returns a list-like structure suitable for \code{\link{create_rule}}
+#'   or \code{\link{set_rule_attributes}}
+#'
+#' @name rule_helpers
+
+#' @rdname rule_helpers
+#' @export
+condition <- function(address, operator, value = NULL) {
+    y <- list(address = address, operator = operator)
+    if (!is.null(value)) y$value <- as.character(value)
+    return(y)
+}
+
+
+#' @rdname rule_helpers
+#' @export
+action <- function(address, method, ...) {
+    list(address = address, method = method, body = list(...))
+}

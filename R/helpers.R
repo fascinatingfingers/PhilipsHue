@@ -171,3 +171,45 @@ configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset
         sunsetoffset = sunsetoffset
     )
 }
+
+#' Guess Room Class
+#'
+#' @param x room name
+#'
+#' @return Returns a character vector with the best guess at the room class of
+#'   the given room name
+#'
+#' @export
+guess_room_class <- function(x) {
+    room_classes <- c(
+        'Living room',
+        'Kitchen',
+        'Dining',
+        'Bedroom',
+        'Kids bedroom',
+        'Bathroom',
+        'Nursery',
+        'Recreation',
+        'Office',
+        'Gym',
+        'Hallway',
+        'Toilet',
+        'Front door',
+        'Garage',
+        'Terrace',
+        'Garden',
+        'Driveway',
+        'Carport',
+        'Other'
+    )
+
+    y <- room_classes[sapply(room_classes, grepl, x = x, ignore.case = TRUE)]
+    y <- c(y, 'Other')
+    y <- y[1]
+
+    if (grepl('^(main|primary)( floor|area)?$', x, ignore.case = TRUE)) {
+        y <- 'Living room'
+    }
+
+    return(y)
+}

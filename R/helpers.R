@@ -141,3 +141,33 @@ condition <- function(address, operator, value = NULL) {
 action <- function(address, method, ...) {
     list(address = address, method = method, body = list(...))
 }
+
+#' Configure Built-In Daylight Sensor
+#'
+#' @param lat latitude
+#' @param lon logitude
+#' @param sunriseoffset "daylight" begins \code{sunriseoffset} minutes after
+#'   sunrise
+#' @param sunsetoffset "daylight" ends \code{sunsetoffset} minutes after sunset
+#' @param id ID of the daylight sensor
+#'
+#' @return Returns \code{TRUE} (invisibly) uppon success
+#'
+#' @export
+configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset = -30, id = 1) {
+    set_sensor_config(
+        id = id,
+        lat = ifelse(
+            lat < 0,
+            sprintf('%03.4fS', abs(lat)),
+            sprintf('%03.4fN', abs(lat))
+        ),
+        long = ifelse(
+            lon < 0,
+            sprintf('%03.4fW', abs(lon)),
+            sprintf('%03.4fE', abs(lon))
+        ),
+        sunriseoffset = sunriseoffset,
+        sunsetoffset = sunsetoffset
+    )
+}

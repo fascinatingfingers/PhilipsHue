@@ -3,6 +3,7 @@
 export(action)
 export(bridge_url)
 export(condition)
+export(configure_daylight_sensor)
 export(create_group)
 export(create_resourcelink)
 export(create_rule)

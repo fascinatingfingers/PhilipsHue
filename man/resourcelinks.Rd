@@ -9,7 +9,7 @@
 \alias{delete_resourcelink}
 \title{Hue API: resourcelinks endpoints}
 \usage{
-create_resourcelink(...)
+create_resourcelink(..., return_id = FALSE)
 
 get_resourcelinks()
 
@@ -22,6 +22,9 @@ delete_resourcelink(id)
 \arguments{
 \item{...}{named parameters describing resourcelink attributes
 (e.g. \code{name = 'foo'})}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id}{id of a specific resourcelink, an integer}
 }

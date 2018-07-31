@@ -10,7 +10,8 @@
 \alias{delete_scene}
 \title{Hue API: scenes endpoints}
 \usage{
-create_scene(name, lights, recycle = TRUE, transitiontime = 4)
+create_scene(name, lights, recycle = TRUE, transitiontime = 4,
+  return_id = FALSE)
 
 get_scenes()
 
@@ -31,6 +32,9 @@ delete_scene(id)
 deleted by the bridge}
 
 \item{transitiontime}{duration (in milliseconds) of the scene transition}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id, scene_id}{id of a specific scene}
 

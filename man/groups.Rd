@@ -10,7 +10,7 @@
 \alias{delete_group}
 \title{Hue API: groups endpoints}
 \usage{
-create_group(...)
+create_group(..., return_id = FALSE)
 
 get_groups()
 
@@ -25,6 +25,9 @@ delete_group(id)
 \arguments{
 \item{...}{named parameters describing group attributes or state
 (e.g. \code{name = 'foo'}; \code{on = TRUE})}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id}{id of a specific group, an integer}
 }

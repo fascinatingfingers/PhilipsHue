@@ -9,7 +9,7 @@
 \alias{delete_rule}
 \title{Hue API: rules endpoints}
 \usage{
-create_rule(name, conditions, actions)
+create_rule(name, conditions, actions, return_id = FALSE)
 
 get_rules()
 
@@ -27,6 +27,9 @@ delete_rule(id)
 
 \item{actions}{a list of conditions (e.g. the result of a call to
 \code{\link{action}} )}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id}{id of a specific rule, an integer}
 }

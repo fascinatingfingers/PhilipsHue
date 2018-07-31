@@ -4,6 +4,8 @@
 #' @param id id of a specific schedule, an integer
 #' @param ... named parameters describing schedule attributes
 #'   (e.g. \code{name = 'foo'})
+#' @param return_id if \code{TRUE} returns the ID of the newly created object
+#'   rather than \code{invisible(TRUE)}
 #'
 #' @return Requests with side effects invisibly return \code{TRUE} upon success.
 #'   GET requests return the response content, parsed into a list.
@@ -14,11 +16,15 @@
 
 #' @rdname schedules
 #' @export
-create_schedule <- function(...) {
+create_schedule <- function(..., return_id = FALSE) {
     path <- bridge_url('schedules')
     y <- httr::POST(path, body = list(...), encode = 'json')
     y <- process_httr_response(y)
-    return(invisible(TRUE))
+    if (return_id) {
+        return(as.character(unlist(y)))
+    } else {
+        return(invisible(TRUE))
+    }
 }
 
 #' @rdname schedules

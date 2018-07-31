@@ -13,7 +13,7 @@
 \alias{delete_sensor}
 \title{Hue API: sensors endpoints}
 \usage{
-create_sensor(...)
+create_sensor(..., return_id = FALSE)
 
 search_for_new_sensors()
 
@@ -33,6 +33,9 @@ delete_sensor(id)
 }
 \arguments{
 \item{...}{named parameters describing sensor state (e.g. \code{on = TRUE})}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id}{id of a specific sensor, an integer}
 

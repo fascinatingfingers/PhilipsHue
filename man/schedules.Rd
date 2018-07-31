@@ -9,7 +9,7 @@
 \alias{delete_schedule}
 \title{Hue API: schedules endpoints}
 \usage{
-create_schedule(...)
+create_schedule(..., return_id = FALSE)
 
 get_schedules()
 
@@ -22,6 +22,9 @@ delete_schedule(id)
 \arguments{
 \item{...}{named parameters describing schedule attributes
 (e.g. \code{name = 'foo'})}
+
+\item{return_id}{if \code{TRUE} returns the ID of the newly created object
+rather than \code{invisible(TRUE)}}
 
 \item{id}{id of a specific schedule, an integer}
 }

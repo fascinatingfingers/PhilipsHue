@@ -7,6 +7,8 @@
 #'   \code{\link{condition}} )
 #' @param actions a list of conditions (e.g. the result of a call to
 #'   \code{\link{action}} )
+#' @param return_id if \code{TRUE} returns the ID of the newly created object
+#'   rather than \code{invisible(TRUE)}
 #'
 #'
 #' @return Requests with side effects invisibly return \code{TRUE} upon success.
@@ -18,7 +20,7 @@
 
 #' @rdname rules
 #' @export
-create_rule <- function(name, conditions, actions) {
+create_rule <- function(name, conditions, actions, return_id = FALSE) {
     path <- bridge_url('rules')
     y <- httr::POST(
         path,
@@ -26,7 +28,11 @@ create_rule <- function(name, conditions, actions) {
         encode = 'json'
     )
     y <- process_httr_response(y)
-    return(invisible(TRUE))
+    if (return_id) {
+        return(as.character(unlist(y)))
+    } else {
+        return(invisible(TRUE))
+    }
 }
 
 #' @rdname rules

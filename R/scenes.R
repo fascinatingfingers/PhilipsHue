@@ -3,18 +3,19 @@
 #'
 #' @param id,scene_id id of a specific scene
 #' @param light_id id of a specific light in the scene
-#' @param name name for the scene
+#' @param name name to assign to the scene
 #' @param lights vector of light IDs included in the scene
 #' @param recycle logical indicating whether the scene can be automatically
 #'   deleted by the bridge
 #' @param transitiontime duration (in milliseconds) of the scene transition
-#' @param ... named parameters describing scene attributes or lightstate
+#' @param ... named parameters describing scene attributes or light state
 #'   (e.g. \code{name = 'foo'}; \code{on = TRUE})
-#' @param return_id if \code{TRUE} returns the ID of the newly created object
-#'   rather than \code{invisible(TRUE)}
+#' @param return_id when creating a new resource, the default is to return
+#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects invisibly return \code{TRUE} upon success.
-#'   GET requests return the response content, parsed into a list.
+#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#'   success. GET requests return the response content, parsed into a list.
 #'
 #' @seealso \url{https://developers.meethue.com/documentation/scenes-api}
 #'

@@ -23,14 +23,15 @@ delete_resourcelink(id)
 \item{...}{named parameters describing resourcelink attributes
 (e.g. \code{name = 'foo'})}
 
-\item{return_id}{if \code{TRUE} returns the ID of the newly created object
-rather than \code{invisible(TRUE)}}
+\item{return_id}{when creating a new resource, the default is to return
+\code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+return the ID of the newly created resource instead.}
 
-\item{id}{id of a specific resourcelink, an integer}
+\item{id}{id of a specific resourcelink}
 }
 \value{
-Requests with side effects invisibly return \code{TRUE} upon success.
-  GET requests return the response content, parsed into a list.
+Requests with side effects return \code{TRUE} (invisibly) upon
+  success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: resourcelinks endpoints

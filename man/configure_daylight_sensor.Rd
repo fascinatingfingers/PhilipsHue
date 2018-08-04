@@ -8,9 +8,9 @@ configure_daylight_sensor(lat, lon, sunriseoffset = 30, sunsetoffset = -30,
   id = 1)
 }
 \arguments{
-\item{lat}{latitude}
+\item{lat}{latitude (in decimal degrees). Positive north; negative south.}
 
-\item{lon}{logitude}
+\item{lon}{longitude (in decimal degrees). Positive east; negative west.}
 
 \item{sunriseoffset}{"daylight" begins \code{sunriseoffset} minutes after
 sunrise}
@@ -20,8 +20,13 @@ sunrise}
 \item{id}{ID of the daylight sensor}
 }
 \value{
-Returns \code{TRUE} (invisibly) uppon success
+Returns \code{TRUE} (invisibly) uppon success.
 }
 \description{
-Configure Built-In Daylight Sensor
+Supported sensors for the Hue Bridge include a virtual daylight sensor that
+calculates sunrise and sunset times based on your location. This function
+helps configure the built-in daylight sensor (\code{id = 1}).
+}
+\seealso{
+\url{https://www.developers.meethue.com/documentation/supported-sensors}
 }

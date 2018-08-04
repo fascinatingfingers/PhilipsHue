@@ -10,10 +10,12 @@ bridge_url(...)
 \item{...}{strings to append to the root URL}
 }
 \value{
-Returns a complete URL for the API endpoint
+Returns a complete URL for the API endpoint.
 }
 \description{
-Create a Hue API endpoint URL
+This function creates a URL for a Hue API endpoint. The base URL is created
+using secrets set with a call to \code{\link{set_bridge_credentials}}. It
+then appends any user-supplied components, separating each with a "/".
 }
 \seealso{
 \code{\link{set_bridge_credentials}}

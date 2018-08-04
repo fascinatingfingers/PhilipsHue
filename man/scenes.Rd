@@ -24,7 +24,7 @@ set_scene_lightstate(scene_id, light_id, ...)
 delete_scene(id)
 }
 \arguments{
-\item{name}{name for the scene}
+\item{name}{name to assign to the scene}
 
 \item{lights}{vector of light IDs included in the scene}
 
@@ -33,19 +33,20 @@ deleted by the bridge}
 
 \item{transitiontime}{duration (in milliseconds) of the scene transition}
 
-\item{return_id}{if \code{TRUE} returns the ID of the newly created object
-rather than \code{invisible(TRUE)}}
+\item{return_id}{when creating a new resource, the default is to return
+\code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+return the ID of the newly created resource instead.}
 
 \item{id, scene_id}{id of a specific scene}
 
-\item{...}{named parameters describing scene attributes or lightstate
+\item{...}{named parameters describing scene attributes or light state
 (e.g. \code{name = 'foo'}; \code{on = TRUE})}
 
 \item{light_id}{id of a specific light in the scene}
 }
 \value{
-Requests with side effects invisibly return \code{TRUE} upon success.
-  GET requests return the response content, parsed into a list.
+Requests with side effects return \code{TRUE} (invisibly) upon
+  success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: scenes endpoints

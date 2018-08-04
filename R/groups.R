@@ -1,14 +1,15 @@
 
 #' Hue API: groups endpoints
 #'
-#' @param id id of a specific group, an integer
+#' @param id id of a specific group
 #' @param ... named parameters describing group attributes or state
 #'   (e.g. \code{name = 'foo'}; \code{on = TRUE})
-#' @param return_id if \code{TRUE} returns the ID of the newly created object
-#'   rather than \code{invisible(TRUE)}
+#' @param return_id when creating a new resource, the default is to return
+#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects invisibly return \code{TRUE} upon success.
-#'   GET requests return the response content, parsed into a list.
+#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#'   success. GET requests return the response content, parsed into a list.
 #'
 #' @seealso \url{https://developers.meethue.com/documentation/groups-api}
 #'

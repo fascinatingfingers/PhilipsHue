@@ -26,14 +26,15 @@ delete_group(id)
 \item{...}{named parameters describing group attributes or state
 (e.g. \code{name = 'foo'}; \code{on = TRUE})}
 
-\item{return_id}{if \code{TRUE} returns the ID of the newly created object
-rather than \code{invisible(TRUE)}}
+\item{return_id}{when creating a new resource, the default is to return
+\code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+return the ID of the newly created resource instead.}
 
-\item{id}{id of a specific group, an integer}
+\item{id}{id of a specific group}
 }
 \value{
-Requests with side effects invisibly return \code{TRUE} upon success.
-  GET requests return the response content, parsed into a list.
+Requests with side effects return \code{TRUE} (invisibly) upon
+  success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: groups endpoints

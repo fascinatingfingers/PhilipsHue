@@ -15,12 +15,12 @@ reset_bridge_credentials()
 \item{username}{the username with access to your Hue Bridge}
 }
 \value{
-Returns \code{TRUE} (invisibly) if a connection to the Hue Bridge was
-  successful.
+Returns \code{TRUE} (invisibly) if options were successfully set or
+  reset.
 }
 \description{
-These functions are used primarily for their side effects -- specifically to
-set (or reset) Hue Bridge authentication secrets stored in
+These functions are used specifically for their side effects -- namely to
+set (or reset) Philips Hue API authentication secrets stored in
 \code{options()$PhilipsHue}.
 }
 \seealso{

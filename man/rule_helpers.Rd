@@ -23,8 +23,10 @@ action(address, method, ...)
 }
 \value{
 Returns a list-like structure suitable for \code{\link{create_rule}}
-  or \code{\link{set_rule_attributes}}
+  or \code{\link{set_rule_attributes}}.
 }
 \description{
-Rule Helpers
+Defining rules can become quite verbose, and it can be tricky to prepare the
+proper list structure for the POST or PUT request. These functions simplify
+things a bit and provide a leaner, more sematic interface.
 }

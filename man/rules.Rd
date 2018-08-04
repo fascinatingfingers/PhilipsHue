@@ -20,22 +20,23 @@ set_rule_attributes(id, name = NULL, conditions = NULL, actions = NULL)
 delete_rule(id)
 }
 \arguments{
-\item{name}{a name to give the rule}
+\item{name}{name to assign to the rule}
 
 \item{conditions}{a list of conditions (e.g. the result of a call to
 \code{\link{condition}} )}
 
-\item{actions}{a list of conditions (e.g. the result of a call to
+\item{actions}{a list of actions (e.g. the result of a call to
 \code{\link{action}} )}
 
-\item{return_id}{if \code{TRUE} returns the ID of the newly created object
-rather than \code{invisible(TRUE)}}
+\item{return_id}{when creating a new resource, the default is to return
+\code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+return the ID of the newly created resource instead.}
 
-\item{id}{id of a specific rule, an integer}
+\item{id}{id of a specific rule}
 }
 \value{
-Requests with side effects invisibly return \code{TRUE} upon success.
-  GET requests return the response content, parsed into a list.
+Requests with side effects return \code{TRUE} (invisibly) upon
+  success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: rules endpoints

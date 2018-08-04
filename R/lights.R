@@ -1,12 +1,12 @@
 
 #' Hue API: lights endpoints
 #'
-#' @param id id of a specific light, an integer
-#' @param name name to give to a specific light
+#' @param id id of a specific light
+#' @param name name to assign to the light
 #' @param ... named parameters describing light state (e.g. \code{on = TRUE})
 #'
-#' @return Requests with side effects invisibly return \code{TRUE} upon success.
-#'   GET requests return the response content, parsed into a list.
+#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#'   success. GET requests return the response content, parsed into a list.
 #'
 #' @seealso \url{https://developers.meethue.com/documentation/lights-api}
 #'

@@ -10,9 +10,12 @@ guess_room_class(x)
 \item{x}{room name}
 }
 \value{
-Returns a character vector with the best guess at the room class of
-  the given room name
+Returns a character vector with the single best guess of the room
+  class of the given room name.
 }
 \description{
-Guess Room Class
+Every new room must be assigned a room "class" (Living room, Kitchen, etc).
+This function attempts to guess the room class from the room name. For
+example, a room named "Master Bedroom" would be assigned the class "Bedroom"
+because it contains a substring match.
 }

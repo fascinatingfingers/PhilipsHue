@@ -10,7 +10,7 @@
 #' Get Full State
 #'
 #' @return Returns a list structure with the current state of all devices and
-#'   resources
+#'   resources.
 #'
 #' @export
 get_state <- function() {

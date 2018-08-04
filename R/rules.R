@@ -1,18 +1,18 @@
 
 #' Hue API: rules endpoints
 #'
-#' @param id id of a specific rule, an integer
-#' @param name a name to give the rule
+#' @param id id of a specific rule
+#' @param name name to assign to the rule
 #' @param conditions a list of conditions (e.g. the result of a call to
 #'   \code{\link{condition}} )
-#' @param actions a list of conditions (e.g. the result of a call to
+#' @param actions a list of actions (e.g. the result of a call to
 #'   \code{\link{action}} )
-#' @param return_id if \code{TRUE} returns the ID of the newly created object
-#'   rather than \code{invisible(TRUE)}
+#' @param return_id when creating a new resource, the default is to return
+#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   return the ID of the newly created resource instead.
 #'
-#'
-#' @return Requests with side effects invisibly return \code{TRUE} upon success.
-#'   GET requests return the response content, parsed into a list.
+#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#'   success. GET requests return the response content, parsed into a list.
 #'
 #' @seealso \url{https://developers.meethue.com/documentation/rules-api}
 #'

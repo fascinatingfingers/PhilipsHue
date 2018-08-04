@@ -12,9 +12,9 @@ process_httr_response(x, ...)
 \item{...}{parameters passed to \code{\link[jsonlite]{fromJSON}}}
 }
 \value{
-Returns the content of the response, parsed into an R-friendly list.
+Returns response content, parsed into an R-friendly list.
 }
 \description{
 This function performs basic error handling and parsing of \code{httr}
-  \code{\link[httr]{response}} objects.
+  \code{\link[httr]{response}} objects returned from Hue API requests.
 }

@@ -26,15 +26,15 @@ set_light_state(id, ...)
 delete_light(id)
 }
 \arguments{
-\item{id}{id of a specific light, an integer}
+\item{id}{id of a specific light}
 
-\item{name}{name to give to a specific light}
+\item{name}{name to assign to the light}
 
 \item{...}{named parameters describing light state (e.g. \code{on = TRUE})}
 }
 \value{
-Requests with side effects invisibly return \code{TRUE} upon success.
-  GET requests return the response content, parsed into a list.
+Requests with side effects return \code{TRUE} (invisibly) upon
+  success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: lights endpoints

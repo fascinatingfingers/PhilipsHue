@@ -2,12 +2,12 @@
 #' Process HTTP Responses
 #'
 #' This function performs basic error handling and parsing of \code{httr}
-#'   \code{\link[httr]{response}} objects.
+#'   \code{\link[httr]{response}} objects returned from Hue API requests.
 #'
 #' @param x an \code{httr} \code{\link[httr]{response}} object
 #' @param ... parameters passed to \code{\link[jsonlite]{fromJSON}}
 #'
-#' @return Returns the content of the response, parsed into an R-friendly list.
+#' @return Returns response content, parsed into an R-friendly list.
 #'
 process_httr_response <- function(x, ...) {
     if (!methods::is(x, 'response')) {
@@ -48,15 +48,15 @@ process_httr_response <- function(x, ...) {
 
 #' Hue Bridge Authentication
 #'
-#' These functions are used primarily for their side effects -- specifically to
-#' set (or reset) Hue Bridge authentication secrets stored in
+#' These functions are used specifically for their side effects -- namely to
+#' set (or reset) Philips Hue API authentication secrets stored in
 #' \code{options()$PhilipsHue}.
 #'
 #' @param ip the IP address of your Hue Bridge
 #' @param username the username with access to your Hue Bridge
 #'
-#' @return Returns \code{TRUE} (invisibly) if a connection to the Hue Bridge was
-#'   successful.
+#' @return Returns \code{TRUE} (invisibly) if options were successfully set or
+#'   reset.
 #'
 #' @seealso \url{https://www.developers.meethue.com/documentation/getting-started}
 #'
@@ -76,8 +76,8 @@ set_bridge_credentials <- function(ip, username) {
     # Prepare base URL
     base_url <- sprintf('http://%s/api/%s', ip, username)
 
-    # Attempt to get bridge configuration
-    message('Attempting to connect to bridge...')
+    # Attempt to get Bridge configuration
+    message('Attempting to connect to Bridge...')
     config <- httr::GET(paste(base_url, 'config', sep = '/'))
 
     # Check for errors, then parse response
@@ -92,13 +92,20 @@ set_bridge_credentials <- function(ip, username) {
 
 #' @rdname set_bridge_credentials
 #' @export
-reset_bridge_credentials <- function() {options(PhilipsHue = list())}
+reset_bridge_credentials <- function() {
+    options(PhilipsHue = list())
+    return(invisible(TRUE))
+}
 
 #' Create a Hue API endpoint URL
 #'
+#' This function creates a URL for a Hue API endpoint. The base URL is created
+#' using secrets set with a call to \code{\link{set_bridge_credentials}}. It
+#' then appends any user-supplied components, separating each with a "/".
+#'
 #' @param ... strings to append to the root URL
 #'
-#' @return Returns a complete URL for the API endpoint
+#' @return Returns a complete URL for the API endpoint.
 #'
 #' @seealso \code{\link{set_bridge_credentials}}
 #'
@@ -116,6 +123,10 @@ bridge_url <- function(...) {
 
 #' Rule Helpers
 #'
+#' Defining rules can become quite verbose, and it can be tricky to prepare the
+#' proper list structure for the POST or PUT request. These functions simplify
+#' things a bit and provide a leaner, more sematic interface.
+#'
 #' @param address path to attribute or resource
 #' @param operator one of: eq, gt, lt, dx, ddx, stable, not stable, in, not in
 #' @param value the value a condition will compare against
@@ -123,7 +134,7 @@ bridge_url <- function(...) {
 #' @param ... named parameters to include in action body
 #'
 #' @return Returns a list-like structure suitable for \code{\link{create_rule}}
-#'   or \code{\link{set_rule_attributes}}
+#'   or \code{\link{set_rule_attributes}}.
 #'
 #' @name rule_helpers
 
@@ -144,14 +155,20 @@ action <- function(address, method, ...) {
 
 #' Configure Built-In Daylight Sensor
 #'
-#' @param lat latitude
-#' @param lon logitude
+#' Supported sensors for the Hue Bridge include a virtual daylight sensor that
+#' calculates sunrise and sunset times based on your location. This function
+#' helps configure the built-in daylight sensor (\code{id = 1}).
+#'
+#' @param lat latitude (in decimal degrees). Positive north; negative south.
+#' @param lon longitude (in decimal degrees). Positive east; negative west.
 #' @param sunriseoffset "daylight" begins \code{sunriseoffset} minutes after
 #'   sunrise
 #' @param sunsetoffset "daylight" ends \code{sunsetoffset} minutes after sunset
 #' @param id ID of the daylight sensor
 #'
-#' @return Returns \code{TRUE} (invisibly) uppon success
+#' @return Returns \code{TRUE} (invisibly) uppon success.
+#'
+#' @seealso \url{https://www.developers.meethue.com/documentation/supported-sensors}
 #'
 #' @export
 configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset = -30, id = 1) {
@@ -174,10 +191,15 @@ configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset
 
 #' Guess Room Class
 #'
+#' Every new room must be assigned a room "class" (Living room, Kitchen, etc).
+#' This function attempts to guess the room class from the room name. For
+#' example, a room named "Master Bedroom" would be assigned the class "Bedroom"
+#' because it contains a substring match.
+#'
 #' @param x room name
 #'
-#' @return Returns a character vector with the best guess at the room class of
-#'   the given room name
+#' @return Returns a character vector with the single best guess of the room
+#'   class of the given room name.
 #'
 #' @export
 guess_room_class <- function(x) {

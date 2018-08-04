@@ -1,7 +1,7 @@
 
 #' Get Capabilities
 #'
-#' @return Returns a list structure with the capabilities of bridges resources
+#' @return Returns a list structure with the capabilities of bridges resources.
 #'
 #' @export
 get_capabilities <- function() {

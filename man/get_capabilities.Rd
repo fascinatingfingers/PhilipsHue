@@ -7,7 +7,7 @@
 get_capabilities()
 }
 \value{
-Returns a list structure with the capabilities of bridges resources
+Returns a list structure with the capabilities of bridges resources.
 }
 \description{
 Get Capabilities

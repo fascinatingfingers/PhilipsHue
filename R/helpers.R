@@ -1,51 +1,4 @@
 
-#' Process HTTP Responses
-#'
-#' This function performs basic error handling and parsing of \code{httr}
-#'   \code{\link[httr]{response}} objects returned from Hue API requests.
-#'
-#' @param x an \code{httr} \code{\link[httr]{response}} object
-#' @param ... parameters passed to \code{\link[jsonlite]{fromJSON}}
-#'
-#' @return Returns response content, parsed into an R-friendly list.
-#'
-process_httr_response <- function(x, ...) {
-    if (!methods::is(x, 'response')) {
-        stop('Input `x` must be an httr response object', call. = FALSE)
-    }
-
-    if (httr::http_type(x) != 'application/json') {
-        stop('API did not return json', call. = FALSE)
-    }
-
-    y <- httr::content(x, 'parsed', encoding = 'UTF-8', ...)
-
-    if (httr::http_error(x)) {
-        stop(
-            sprintf(
-                'API request failed [%s]\n%s',
-                httr::status_code(x),
-                yaml::as.yaml(y)
-            ),
-            call. = FALSE
-        )
-    }
-
-    api_errors <- subset(y, purrr::map_lgl(y, ~ identical(names(.), 'error')))
-
-    if (length(api_errors) > 0) {
-        stop(
-            sprintf(
-                'API request returned errors\n%s',
-                yaml::as.yaml(api_errors)
-            ),
-            call. = FALSE
-        )
-    }
-
-    return(y)
-}
-
 #' Hue Bridge Authentication
 #'
 #' These functions are used specifically for their side effects -- namely to
@@ -121,116 +74,48 @@ bridge_url <- function(...) {
     return(paste(base_url, ..., sep = '/'))
 }
 
-#' Rule Helpers
+#' Process HTTP Responses
 #'
-#' Defining rules can become quite verbose, and it can be tricky to prepare the
-#' proper list structure for the POST or PUT request. These functions simplify
-#' things a bit and provide a leaner, more sematic interface.
+#' This function performs basic error handling and parsing of \code{httr}
+#'   \code{\link[httr]{response}} objects returned from Hue API requests.
 #'
-#' @param address path to attribute or resource
-#' @param operator one of: eq, gt, lt, dx, ddx, stable, not stable, in, not in
-#' @param value the value a condition will compare against
-#' @param method the HTTP method used to send the body to the given address
-#' @param ... named parameters to include in action body
+#' @param x an \code{httr} \code{\link[httr]{response}} object
+#' @param ... parameters passed to \code{\link[jsonlite]{fromJSON}}
 #'
-#' @return Returns a list-like structure suitable for \code{\link{create_rule}}
-#'   or \code{\link{set_rule_attributes}}.
+#' @return Returns response content, parsed into an R-friendly list.
 #'
-#' @name rule_helpers
+process_httr_response <- function(x, ...) {
+    if (!methods::is(x, 'response')) {
+        stop('Input `x` must be an httr response object', call. = FALSE)
+    }
 
-#' @rdname rule_helpers
-#' @export
-condition <- function(address, operator, value = NULL) {
-    y <- list(address = address, operator = operator)
-    if (!is.null(value)) y$value <- as.character(value)
-    return(y)
-}
+    if (httr::http_type(x) != 'application/json') {
+        stop('API did not return json', call. = FALSE)
+    }
 
+    y <- httr::content(x, 'parsed', encoding = 'UTF-8', ...)
 
-#' @rdname rule_helpers
-#' @export
-action <- function(address, method, ...) {
-    list(address = address, method = method, body = list(...))
-}
+    if (httr::http_error(x)) {
+        stop(
+            sprintf(
+                'API request failed [%s]\n%s',
+                httr::status_code(x),
+                yaml::as.yaml(y)
+            ),
+            call. = FALSE
+        )
+    }
 
-#' Configure Built-In Daylight Sensor
-#'
-#' Supported sensors for the Hue Bridge include a virtual daylight sensor that
-#' calculates sunrise and sunset times based on your location. This function
-#' helps configure the built-in daylight sensor (\code{id = 1}).
-#'
-#' @param lat latitude (in decimal degrees). Positive north; negative south.
-#' @param lon longitude (in decimal degrees). Positive east; negative west.
-#' @param sunriseoffset "daylight" begins \code{sunriseoffset} minutes after
-#'   sunrise
-#' @param sunsetoffset "daylight" ends \code{sunsetoffset} minutes after sunset
-#' @param id ID of the daylight sensor
-#'
-#' @return Returns \code{TRUE} (invisibly) uppon success.
-#'
-#' @seealso \url{https://www.developers.meethue.com/documentation/supported-sensors}
-#'
-#' @export
-configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset = -30, id = 1) {
-    set_sensor_config(
-        id = id,
-        lat = ifelse(
-            lat < 0,
-            sprintf('%03.4fS', abs(lat)),
-            sprintf('%03.4fN', abs(lat))
-        ),
-        long = ifelse(
-            lon < 0,
-            sprintf('%03.4fW', abs(lon)),
-            sprintf('%03.4fE', abs(lon))
-        ),
-        sunriseoffset = sunriseoffset,
-        sunsetoffset = sunsetoffset
-    )
-}
+    api_errors <- subset(y, purrr::map_lgl(y, ~ identical(names(.), 'error')))
 
-#' Guess Room Class
-#'
-#' Every new room must be assigned a room "class" (Living room, Kitchen, etc).
-#' This function attempts to guess the room class from the room name. For
-#' example, a room named "Master Bedroom" would be assigned the class "Bedroom"
-#' because it contains a substring match.
-#'
-#' @param x room name
-#'
-#' @return Returns a character vector with the single best guess of the room
-#'   class of the given room name.
-#'
-#' @export
-guess_room_class <- function(x) {
-    room_classes <- c(
-        'Living room',
-        'Kitchen',
-        'Dining',
-        'Bedroom',
-        'Kids bedroom',
-        'Bathroom',
-        'Nursery',
-        'Recreation',
-        'Office',
-        'Gym',
-        'Hallway',
-        'Toilet',
-        'Front door',
-        'Garage',
-        'Terrace',
-        'Garden',
-        'Driveway',
-        'Carport',
-        'Other'
-    )
-
-    y <- room_classes[sapply(room_classes, grepl, x = x, ignore.case = TRUE)]
-    y <- c(y, 'Other')
-    y <- y[1]
-
-    if (grepl('^(main|primary)( floor|area)?$', x, ignore.case = TRUE)) {
-        y <- 'Living room'
+    if (length(api_errors) > 0) {
+        stop(
+            sprintf(
+                'API request returned errors\n%s',
+                yaml::as.yaml(api_errors)
+            ),
+            call. = FALSE
+        )
     }
 
     return(y)

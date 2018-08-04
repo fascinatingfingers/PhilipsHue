@@ -72,3 +72,50 @@ delete_group <- function(id) {
     y <- process_httr_response(y)
     return(invisible(TRUE))
 }
+
+#' Guess Room Class
+#'
+#' Every new room must be assigned a room "class" (Living room, Kitchen, etc).
+#' This function attempts to guess the room class from the room name. For
+#' example, a room named "Master Bedroom" would be assigned the class "Bedroom"
+#' because it contains a substring match.
+#'
+#' @param x room name
+#'
+#' @return Returns a character vector with the single best guess of the room
+#'   class of the given room name.
+#'
+#' @export
+guess_room_class <- function(x) {
+    room_classes <- c(
+        'Living room',
+        'Kitchen',
+        'Dining',
+        'Bedroom',
+        'Kids bedroom',
+        'Bathroom',
+        'Nursery',
+        'Recreation',
+        'Office',
+        'Gym',
+        'Hallway',
+        'Toilet',
+        'Front door',
+        'Garage',
+        'Terrace',
+        'Garden',
+        'Driveway',
+        'Carport',
+        'Other'
+    )
+
+    y <- room_classes[sapply(room_classes, grepl, x = x, ignore.case = TRUE)]
+    y <- c(y, 'Other')
+    y <- y[1]
+
+    if (grepl('^(main|primary)( floor|area)?$', x, ignore.case = TRUE)) {
+        y <- 'Living room'
+    }
+
+    return(y)
+}

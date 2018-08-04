@@ -99,3 +99,39 @@ delete_sensor <- function(id) {
     y <- process_httr_response(y)
     return(invisible(TRUE))
 }
+
+#' Configure Built-In Daylight Sensor
+#'
+#' Supported sensors for the Hue Bridge include a virtual daylight sensor that
+#' calculates sunrise and sunset times based on your location. This function
+#' helps configure the built-in daylight sensor (\code{id = 1}).
+#'
+#' @param lat latitude (in decimal degrees). Positive north; negative south.
+#' @param lon longitude (in decimal degrees). Positive east; negative west.
+#' @param sunriseoffset "daylight" begins \code{sunriseoffset} minutes after
+#'   sunrise
+#' @param sunsetoffset "daylight" ends \code{sunsetoffset} minutes after sunset
+#' @param id ID of the daylight sensor
+#'
+#' @return Returns \code{TRUE} (invisibly) uppon success.
+#'
+#' @seealso \url{https://www.developers.meethue.com/documentation/supported-sensors}
+#'
+#' @export
+configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset = -30, id = 1) {
+    set_sensor_config(
+        id = id,
+        lat = ifelse(
+            lat < 0,
+            sprintf('%03.4fS', abs(lat)),
+            sprintf('%03.4fN', abs(lat))
+        ),
+        long = ifelse(
+            lon < 0,
+            sprintf('%03.4fW', abs(lon)),
+            sprintf('%03.4fE', abs(lon))
+        ),
+        sunriseoffset = sunriseoffset,
+        sunsetoffset = sunsetoffset
+    )
+}

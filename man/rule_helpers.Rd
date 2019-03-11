@@ -22,8 +22,8 @@ action(address, method, ...)
 \item{...}{named parameters to include in action body}
 }
 \value{
-Returns a list-like structure suitable for \code{\link{create_rule}}
-  or \code{\link{set_rule_attributes}}.
+Returns a list-like structure suitable for \code{\link[=create_rule]{create_rule()}}
+or \code{\link[=set_rule_attributes]{set_rule_attributes()}}.
 }
 \description{
 Defining rules can become quite verbose, and it can be tricky to prepare the

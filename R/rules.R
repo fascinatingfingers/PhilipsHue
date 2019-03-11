@@ -4,17 +4,17 @@
 #' @param id id of a specific rule
 #' @param name name to assign to the rule
 #' @param conditions a list of conditions (e.g. the result of a call to
-#'   \code{\link{condition}} )
+#'   [condition()] )
 #' @param actions a list of actions (e.g. the result of a call to
-#'   \code{\link{action}} )
+#'   [action()] )
 #' @param return_id when creating a new resource, the default is to return
-#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   `TRUE` (invisibly) upon success; setting `return_id = TRUE` will
 #'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#' @return Requests with side effects return `TRUE` (invisibly) upon
 #'   success. GET requests return the response content, parsed into a list.
 #'
-#' @seealso \url{https://developers.meethue.com/documentation/rules-api}
+#' @seealso <https://developers.meethue.com/documentation/rules-api>
 #'
 #' @name rules
 
@@ -87,8 +87,8 @@ delete_rule <- function(id) {
 #' @param method the HTTP method used to send the body to the given address
 #' @param ... named parameters to include in action body
 #'
-#' @return Returns a list-like structure suitable for \code{\link{create_rule}}
-#'   or \code{\link{set_rule_attributes}}.
+#' @return Returns a list-like structure suitable for [create_rule()]
+#'   or [set_rule_attributes()].
 #'
 #' @name rule_helpers
 

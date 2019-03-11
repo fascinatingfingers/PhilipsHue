@@ -7,14 +7,14 @@
 process_httr_response(x, ...)
 }
 \arguments{
-\item{x}{an \code{httr} \code{\link[httr]{response}} object}
+\item{x}{an \code{httr} \code{\link[httr:response]{httr::response()}} object}
 
-\item{...}{parameters passed to \code{\link[jsonlite]{fromJSON}}}
+\item{...}{parameters passed to \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}}}
 }
 \value{
 Returns response content, parsed into an R-friendly list.
 }
 \description{
 This function performs basic error handling and parsing of \code{httr}
-  \code{\link[httr]{response}} objects returned from Hue API requests.
+\code{\link[httr:response]{httr::response()}} objects returned from Hue API requests.
 }

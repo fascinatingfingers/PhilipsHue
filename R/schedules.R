@@ -3,15 +3,15 @@
 #'
 #' @param id id of a specific schedule
 #' @param ... named parameters describing schedule attributes
-#'   (e.g. \code{name = 'foo'})
+#'   (e.g. `name = 'foo'`)
 #' @param return_id when creating a new resource, the default is to return
-#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   `TRUE` (invisibly) upon success; setting `return_id = TRUE` will
 #'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#' @return Requests with side effects return `TRUE` (invisibly) upon
 #'   success. GET requests return the response content, parsed into a list.
 #'
-#' @seealso \url{https://developers.meethue.com/documentation/schedules-api-0}
+#' @seealso <https://developers.meethue.com/documentation/schedules-api-0>
 #'
 #' @name schedules
 

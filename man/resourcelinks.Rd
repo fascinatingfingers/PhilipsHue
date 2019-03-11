@@ -31,7 +31,7 @@ return the ID of the newly created resource instead.}
 }
 \value{
 Requests with side effects return \code{TRUE} (invisibly) upon
-  success. GET requests return the response content, parsed into a list.
+success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: resourcelinks endpoints

@@ -2,7 +2,7 @@ Type: Package
 Package: PhilipsHue
 Title: R Interface to the Philips Hue API
 Version: 0.1.0
-Author: person('Justin', 'Brantley', email = 'fascinatingfingers@icloud.com', role = c('aut', 'cre'))
+Authors@R: person('Justin', 'Brantley', email = 'fascinatingfingers@icloud.com', role = c('aut', 'cre'))
 Description: The PhilipsHue package provides an R interface to the Philips Hue
     API service, making it easy to make API calls and process the response into
     convenient, R-friendly data structures. See

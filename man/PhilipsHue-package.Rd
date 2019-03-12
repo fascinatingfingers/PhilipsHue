@@ -20,4 +20,8 @@ Useful links:
 }
 
 }
+\author{
+\strong{Maintainer}: Justin Brantley \email{fascinatingfingers@icloud.com}
+
+}
 \keyword{internal}

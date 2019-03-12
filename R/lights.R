@@ -3,12 +3,12 @@
 #'
 #' @param id id of a specific light
 #' @param name name to assign to the light
-#' @param ... named parameters describing light state (e.g. \code{on = TRUE})
+#' @param ... named parameters describing light state (e.g. `on = TRUE`)
 #'
-#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#' @return Requests with side effects return `TRUE` (invisibly) upon
 #'   success. GET requests return the response content, parsed into a list.
 #'
-#' @seealso \url{https://developers.meethue.com/documentation/lights-api}
+#' @seealso <https://developers.meethue.com/documentation/lights-api>
 #'
 #' @name lights
 

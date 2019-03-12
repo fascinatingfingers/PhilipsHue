@@ -9,15 +9,15 @@
 #'   deleted by the bridge
 #' @param transitiontime duration (in milliseconds) of the scene transition
 #' @param ... named parameters describing scene attributes or light state
-#'   (e.g. \code{name = 'foo'}; \code{on = TRUE})
+#'   (e.g. `name = 'foo'`; `on = TRUE`)
 #' @param return_id when creating a new resource, the default is to return
-#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   `TRUE` (invisibly) upon success; setting `return_id = TRUE` will
 #'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#' @return Requests with side effects return `TRUE` (invisibly) upon
 #'   success. GET requests return the response content, parsed into a list.
 #'
-#' @seealso \url{https://developers.meethue.com/documentation/scenes-api}
+#' @seealso <https://developers.meethue.com/documentation/scenes-api>
 #'
 #' @name scenes
 

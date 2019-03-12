@@ -8,7 +8,7 @@ get_state()
 }
 \value{
 Returns a list structure with the current state of all devices and
-  resources.
+resources.
 }
 \description{
 Get Full State

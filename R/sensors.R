@@ -3,15 +3,15 @@
 #'
 #' @param id id of a specific sensor
 #' @param name name to assign to the sensor
-#' @param ... named parameters describing sensor state (e.g. \code{on = TRUE})
+#' @param ... named parameters describing sensor state (e.g. `on = TRUE`)
 #' @param return_id when creating a new resource, the default is to return
-#'   \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
+#'   `TRUE` (invisibly) upon success; setting `return_id = TRUE` will
 #'   return the ID of the newly created resource instead.
 #'
-#' @return Requests with side effects return \code{TRUE} (invisibly) upon
+#' @return Requests with side effects return `TRUE` (invisibly) upon
 #'   success. GET requests return the response content, parsed into a list.
 #'
-#' @seealso \url{https://developers.meethue.com/documentation/sensors-api}
+#' @seealso <https://developers.meethue.com/documentation/sensors-api>
 #'
 #' @name sensors
 
@@ -104,18 +104,18 @@ delete_sensor <- function(id) {
 #'
 #' Supported sensors for the Hue Bridge include a virtual daylight sensor that
 #' calculates sunrise and sunset times based on your location. This function
-#' helps configure the built-in daylight sensor (\code{id = 1}).
+#' helps configure the built-in daylight sensor (`id = 1`).
 #'
 #' @param lat latitude (in decimal degrees). Positive north; negative south.
 #' @param lon longitude (in decimal degrees). Positive east; negative west.
-#' @param sunriseoffset "daylight" begins \code{sunriseoffset} minutes after
+#' @param sunriseoffset "daylight" begins `sunriseoffset` minutes after
 #'   sunrise
-#' @param sunsetoffset "daylight" ends \code{sunsetoffset} minutes after sunset
+#' @param sunsetoffset "daylight" ends `sunsetoffset` minutes after sunset
 #' @param id ID of the daylight sensor
 #'
-#' @return Returns \code{TRUE} (invisibly) uppon success.
+#' @return Returns `TRUE` (invisibly) uppon success.
 #'
-#' @seealso \url{https://www.developers.meethue.com/documentation/supported-sensors}
+#' @seealso <https://www.developers.meethue.com/documentation/supported-sensors>
 #'
 #' @export
 configure_daylight_sensor <- function(lat, lon, sunriseoffset = 30, sunsetoffset = -30, id = 1) {

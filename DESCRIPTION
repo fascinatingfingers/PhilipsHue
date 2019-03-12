@@ -1,16 +1,23 @@
-Package: PhilipsHue
 Type: Package
+Package: PhilipsHue
 Title: R Interface to the Philips Hue API
 Version: 0.1.0
-Author: Justin Brantley <fascinatingfingers@icloud.com>
-Maintainer: Justin Brantley <fascinatingfingers@icloud.com>
-URL: https://github.com/fascinatingfingers/PhilipsHue
+Authors@R: person('Justin', 'Brantley', email = 'fascinatingfingers@icloud.com', role = c('aut', 'cre'))
 Description: The PhilipsHue package provides an R interface to the Philips Hue
     API service, making it easy to make API calls and process the response into
     convenient, R-friendly data structures. See
     <https://developers.meethue.com/philips-hue-api> for the Philips Hue API
     Documentation.
 License: GPL-3
-LazyData: true
-Imports: methods, yaml, httr, purrr
+URL: https://gitlab.com/fascinatingfingers/philipshue
+BugReports: https://gitlab.com/fascinatingfingers/philipshue/issues
+Imports: 
+    httr,
+    methods,
+    purrr,
+    yaml
+Suggests: 
+    testthat
+LazyData: TRUE
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1

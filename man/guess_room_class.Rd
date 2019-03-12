@@ -11,7 +11,7 @@ guess_room_class(x)
 }
 \value{
 Returns a character vector with the single best guess of the room
-  class of the given room name.
+class of the given room name.
 }
 \description{
 Every new room must be assigned a room "class" (Living room, Kitchen, etc).

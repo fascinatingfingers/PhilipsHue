@@ -34,7 +34,7 @@ delete_light(id)
 }
 \value{
 Requests with side effects return \code{TRUE} (invisibly) upon
-  success. GET requests return the response content, parsed into a list.
+success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: lights endpoints

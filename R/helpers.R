@@ -3,15 +3,15 @@
 #'
 #' These functions are used specifically for their side effects -- namely to
 #' set (or reset) Philips Hue API authentication secrets stored in
-#' \code{options()$PhilipsHue}.
+#' `options()$PhilipsHue`.
 #'
 #' @param ip the IP address of your Hue Bridge
 #' @param username the username with access to your Hue Bridge
 #'
-#' @return Returns \code{TRUE} (invisibly) if options were successfully set or
+#' @return Returns `TRUE` (invisibly) if options were successfully set or
 #'   reset.
 #'
-#' @seealso \url{https://www.developers.meethue.com/documentation/getting-started}
+#' @seealso <https://www.developers.meethue.com/documentation/getting-started>
 #'
 #' @export
 #'
@@ -53,14 +53,14 @@ reset_bridge_credentials <- function() {
 #' Create a Hue API endpoint URL
 #'
 #' This function creates a URL for a Hue API endpoint. The base URL is created
-#' using secrets set with a call to \code{\link{set_bridge_credentials}}. It
+#' using secrets set with a call to [set_bridge_credentials()]. It
 #' then appends any user-supplied components, separating each with a "/".
 #'
 #' @param ... strings to append to the root URL
 #'
 #' @return Returns a complete URL for the API endpoint.
 #'
-#' @seealso \code{\link{set_bridge_credentials}}
+#' @seealso [set_bridge_credentials()]
 #'
 #' @export
 #'
@@ -76,11 +76,11 @@ bridge_url <- function(...) {
 
 #' Process HTTP Responses
 #'
-#' This function performs basic error handling and parsing of \code{httr}
-#'   \code{\link[httr]{response}} objects returned from Hue API requests.
+#' This function performs basic error handling and parsing of `httr`
+#'   [httr::response()] objects returned from Hue API requests.
 #'
-#' @param x an \code{httr} \code{\link[httr]{response}} object
-#' @param ... parameters passed to \code{\link[jsonlite]{fromJSON}}
+#' @param x an `httr` [httr::response()] object
+#' @param ... parameters passed to [jsonlite::fromJSON()]
 #'
 #' @return Returns response content, parsed into an R-friendly list.
 #'

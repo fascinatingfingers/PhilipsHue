@@ -1,6 +1,11 @@
 
 # An R Client for the Philips Hue API
 
+[![pipeline status](https://gitlab.com/fascinatingfingers/philipshue/badges/master/pipeline.svg)](https://gitlab.com/fascinatingfingers/philipshue/pipelines)
+[![coverage report](https://gitlab.com/fascinatingfingers/philipshue/badges/master/coverage.svg)](https://gitlab.com/fascinatingfingers/philipshue/commits/master)
+
+---
+
 The [Philips Hue API](https://www.developers.meethue.com/) provides fine-grained
 control over your Hue lighting system, and the PhilipsHue package for R aims to
 simplify making requests to the API and processing responses.

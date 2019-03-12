@@ -23,10 +23,10 @@ delete_rule(id)
 \item{name}{name to assign to the rule}
 
 \item{conditions}{a list of conditions (e.g. the result of a call to
-\code{\link{condition}} )}
+\code{\link[=condition]{condition()}} )}
 
 \item{actions}{a list of actions (e.g. the result of a call to
-\code{\link{action}} )}
+\code{\link[=action]{action()}} )}
 
 \item{return_id}{when creating a new resource, the default is to return
 \code{TRUE} (invisibly) upon success; setting \code{return_id = TRUE} will
@@ -36,7 +36,7 @@ return the ID of the newly created resource instead.}
 }
 \value{
 Requests with side effects return \code{TRUE} (invisibly) upon
-  success. GET requests return the response content, parsed into a list.
+success. GET requests return the response content, parsed into a list.
 }
 \description{
 Hue API: rules endpoints

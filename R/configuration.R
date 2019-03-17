@@ -1,12 +1,4 @@
 
-# TODO create_user
-
-# TODO delete_user
-
-# TODO get_configuration
-
-# TODO set_configuration_attributes
-
 #' Get Full State
 #'
 #' @return Returns a list structure with the current state of all devices and

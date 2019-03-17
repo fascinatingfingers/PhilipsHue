@@ -28,5 +28,5 @@ or \code{\link[=set_rule_attributes]{set_rule_attributes()}}.
 \description{
 Defining rules can become quite verbose, and it can be tricky to prepare the
 proper list structure for the POST or PUT request. These functions simplify
-things a bit and provide a leaner, more sematic interface.
+things a bit and provide a leaner, more semantic interface.
 }

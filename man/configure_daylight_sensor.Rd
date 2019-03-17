@@ -20,7 +20,7 @@ sunrise}
 \item{id}{ID of the daylight sensor}
 }
 \value{
-Returns \code{TRUE} (invisibly) uppon success.
+Returns \code{TRUE} (invisibly) upon success.
 }
 \description{
 Supported sensors for the Hue Bridge include a virtual daylight sensor that

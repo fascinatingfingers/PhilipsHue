@@ -79,7 +79,7 @@ delete_rule <- function(id) {
 #'
 #' Defining rules can become quite verbose, and it can be tricky to prepare the
 #' proper list structure for the POST or PUT request. These functions simplify
-#' things a bit and provide a leaner, more sematic interface.
+#' things a bit and provide a leaner, more semantic interface.
 #'
 #' @param address path to attribute or resource
 #' @param operator one of: eq, gt, lt, dx, ddx, stable, not stable, in, not in

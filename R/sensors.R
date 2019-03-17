@@ -113,7 +113,7 @@ delete_sensor <- function(id) {
 #' @param sunsetoffset "daylight" ends `sunsetoffset` minutes after sunset
 #' @param id ID of the daylight sensor
 #'
-#' @return Returns `TRUE` (invisibly) uppon success.
+#' @return Returns `TRUE` (invisibly) upon success.
 #'
 #' @seealso <https://www.developers.meethue.com/documentation/supported-sensors>
 #'

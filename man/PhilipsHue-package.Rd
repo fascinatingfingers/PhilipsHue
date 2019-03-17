@@ -6,11 +6,11 @@
 \alias{PhilipsHue-package}
 \title{PhilipsHue: R Interface to the Philips Hue API}
 \description{
-The PhilipsHue package provides an R interface to the Philips Hue
-API service, making it easy to make API calls and process the response into
-convenient, R-friendly data structures. See
-<https://developers.meethue.com/philips-hue-api> for the Philips Hue API
-Documentation.
+The PhilipsHue package provides an R interface to
+    the Philips Hue API service, making it easy to make API calls and
+    process the response into convenient, R-friendly data structures. See
+    <https://developers.meethue.com/philips-hue-api> for the Philips Hue
+    API Documentation.
 }
 \seealso{
 Useful links:

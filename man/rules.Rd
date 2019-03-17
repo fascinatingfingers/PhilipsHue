@@ -15,7 +15,8 @@ get_rules()
 
 get_rule(id)
 
-set_rule_attributes(id, name = NULL, conditions = NULL, actions = NULL)
+set_rule_attributes(id, name = NULL, conditions = NULL,
+  actions = NULL)
 
 delete_rule(id)
 }

@@ -4,8 +4,8 @@
 \alias{configure_daylight_sensor}
 \title{Configure Built-In Daylight Sensor}
 \usage{
-configure_daylight_sensor(lat, lon, sunriseoffset = 30, sunsetoffset = -30,
-  id = 1)
+configure_daylight_sensor(lat, lon, sunriseoffset = 30,
+  sunsetoffset = -30, id = 1)
 }
 \arguments{
 \item{lat}{latitude (in decimal degrees). Positive north; negative south.}

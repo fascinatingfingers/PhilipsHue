@@ -20,6 +20,8 @@ Imports:
     httr,
     methods,
     purrr,
+    utils,
+    uuid,
     yaml
 Suggests: 
     testthat

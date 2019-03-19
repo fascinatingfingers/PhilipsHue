@@ -4,7 +4,9 @@
 \alias{token}
 \title{Request authorization token}
 \usage{
-token(auth_code, client_id, client_secret)
+token(auth_code = Sys.getenv("PHILIPS_HUE_AUTH_CODE"),
+  client_id = Sys.getenv("PHILIPS_HUE_CLIENT_ID"),
+  client_secret = Sys.getenv("PHILIPS_HUE_CLIENT_SECRET"))
 }
 \arguments{
 \item{auth_code}{authorization code sent to your app's callback URL

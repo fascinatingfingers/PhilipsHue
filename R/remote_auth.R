@@ -12,7 +12,7 @@
 #'   with Hue)
 #' @param app_id your app's ID (the name you registered your app under)
 #' @param bridge_id ID of hue bridge you'd like remote access to
-#' @param device_name name of hue bridge you'd like remote access to
+#' @param bridge_name name of hue bridge you'd like remote access to
 #' @param state arbitrary data that will be included in the redirected response
 #'   (see Details)
 #'
@@ -22,10 +22,16 @@
 #' @return Returns a URL to request remote access to a user's bridge.
 #'
 #' @examples
-#' remote_auth_request_url('client_id', 'app id', 'device_id', 'device name')
+#' remote_auth_request_url('client_id', 'app id', 'bridge_id', 'bridge name')
 #'
 #' @export
-remote_auth_request_url <- function(client_id, app_id, bridge_id, device_name, state = NULL) {
+remote_auth_request_url <- function(
+    client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
+    app_id = Sys.getenv('PHILIPS_HUE_APP_ID'),
+    bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
+    bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'),
+    state = NULL
+) {
     if (is.null(state)) {state <- gsub('-', '', uuid::UUIDgenerate())}
 
     sprintf(
@@ -33,7 +39,7 @@ remote_auth_request_url <- function(client_id, app_id, bridge_id, device_name, s
         utils::URLencode(client_id),
         utils::URLencode(app_id),
         utils::URLencode(bridge_id),
-        utils::URLencode(device_name),
+        utils::URLencode(bridge_name),
         utils::URLencode(state)
     )
 }
@@ -54,7 +60,11 @@ remote_auth_request_url <- function(client_id, app_id, bridge_id, device_name, s
 #'   expiration times
 #'
 #' @export
-token <- function(auth_code, client_id, client_secret) {
+token <- function(
+    auth_code = Sys.getenv('PHILIPS_HUE_AUTH_CODE'),
+    client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
+    client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
+) {
     x <- sprintf(
         'https://api.meethue.com/oauth2/token?code=%s&grant_type=authorization_code',
         utils::URLencode(auth_code)
@@ -128,7 +138,7 @@ remote_button_press <- function(token) {
 #'   and returns a username that can be used to authenticate future requests.
 #'
 #' @export
-app_username <- function(token, app_id) {
+app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID')) {
     res <- httr::POST(
         'https://api.meethue.com/bridge/',
         httr::add_headers(Authorization = paste('Bearer', token)),

@@ -4,7 +4,7 @@
 \alias{app_username}
 \title{Whitelist your app and receive a username}
 \usage{
-app_username(token, app_id)
+app_username(token, app_id = Sys.getenv("PHILIPS_HUE_APP_ID"))
 }
 \arguments{
 \item{token}{token returned from \code{\link[=token]{token()}}}

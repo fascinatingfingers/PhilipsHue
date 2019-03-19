@@ -4,8 +4,10 @@
 \alias{remote_auth_request_url}
 \title{Request remote access to user's bridge}
 \usage{
-remote_auth_request_url(client_id, app_id, bridge_id, device_name,
-  state = NULL)
+remote_auth_request_url(client_id = Sys.getenv("PHILIPS_HUE_CLIENT_ID"),
+  app_id = Sys.getenv("PHILIPS_HUE_APP_ID"),
+  bridge_id = Sys.getenv("PHILIPS_HUE_BRIDGE_ID"),
+  bridge_name = Sys.getenv("PHILIPS_HUE_BRIDGE_NAME"), state = NULL)
 }
 \arguments{
 \item{client_id}{your app's client ID (assigned when you registered your app
@@ -15,7 +17,7 @@ with Hue)}
 
 \item{bridge_id}{ID of hue bridge you'd like remote access to}
 
-\item{device_name}{name of hue bridge you'd like remote access to}
+\item{bridge_name}{name of hue bridge you'd like remote access to}
 
 \item{state}{arbitrary data that will be included in the redirected response
 (see Details)
@@ -35,6 +37,6 @@ your app. This redirect URL will include an authorization code as a query
 parameter. Retain this code.
 }
 \examples{
-remote_auth_request_url('client_id', 'app id', 'device_id', 'device name')
+remote_auth_request_url('client_id', 'app id', 'bridge_id', 'bridge name')
 
 }

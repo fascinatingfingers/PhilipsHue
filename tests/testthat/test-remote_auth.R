@@ -22,7 +22,7 @@ test_that('`token` throws error and prints parsed content if POST fails', {
     expect_error(token('mock auth code'), 'mock error 1')
 })
 
-test_that('`token` returns token if POST fails', {
+test_that('`token` returns token if POST succeeds', {
     mockery::stub(token, 'httr::POST', list())
     mockery::stub(token, 'httr::status_code', 200)
     mockery::stub(token, 'httr::content', list(access_token = 'mock access token'))

@@ -113,6 +113,6 @@ remote_button_press <- function(token) {
             error = function(e) {list()}
         )
 
-        stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
+        stop('Remote button press faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }

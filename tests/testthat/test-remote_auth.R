@@ -29,3 +29,23 @@ test_that('`token` returns token if POST succeeds', {
 
     expect_identical(token('mock auth code'), 'mock access token')
 })
+
+
+
+context('remote_button_press')
+
+test_that('`remote_button_press` throws error and prints parsed content if POST fails', {
+    mockery::stub(remote_button_press, 'httr::PUT', list())
+    mockery::stub(remote_button_press, 'httr::status_code', 'mock status code')
+    mockery::stub(remote_button_press, 'httr::content', list(errors = c('mock error 1')))
+
+    expect_error(remote_button_press('mock access token'), 'mock status code')
+    expect_error(remote_button_press('mock access token'), 'mock error 1')
+})
+
+test_that('`remote_button_press` returns TRUE if POST succeeds', {
+    mockery::stub(remote_button_press, 'httr::POST', list())
+    mockery::stub(remote_button_press, 'httr::status_code', 200)
+
+    expect_true(remote_button_press('mock access token'))
+})

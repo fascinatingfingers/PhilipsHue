@@ -80,3 +80,39 @@ token <- function(auth_code, client_id, client_secret) {
         stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }
+
+#' Remotely activate a button press on the user's bridge
+#'
+#' After obtaining an authorization token (see [token()]), the token can be
+#' used to remotely "press" the button on the Hue bridge as part of a remote
+#' authentication sequence.
+#'
+#' @param token token returned from [token()]
+#'
+#' @return Returns `TRUE` (invisibly) if the call was successful.
+#'
+#' @export
+remote_button_press <- function(token) {
+    res <- httr::PUT(
+        'https://api.meethue.com/bridge/0/config',
+        httr::add_headers(Authorization = paste('Bearer', token)),
+        body = list(linkbutton = TRUE),
+        encode = 'json'
+    )
+
+    res_status <- tryCatch(
+        httr::status_code(res),
+        error = function(e) {NA}
+    )
+
+    if (res_status %in% 200) {
+        return(invisible(TRUE))
+    } else {
+        res_content <- tryCatch(
+            httr::content(res, as = 'parsed'),
+            error = function(e) {list()}
+        )
+
+        stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
+    }
+}

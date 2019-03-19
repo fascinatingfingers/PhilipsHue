@@ -1,5 +1,5 @@
 
-context('remote_auth')
+context('remote_auth_request_url')
 
 test_that('helper creates URL to request access to bridge from client', {
     mockery::stub(remote_auth_request_url, 'uuid::UUIDgenerate', 'mock_uuid')
@@ -8,6 +8,10 @@ test_that('helper creates URL to request access to bridge from client', {
         'https://api.meethue.com/oauth2/auth?clientid=client_id&appid=app%20id&deviceid=device_id&devicename=device%20name&state=mock_uuid&response_type=code'
     )
 })
+
+
+
+context('token')
 
 test_that('`token` throws error and prints parsed content if POST fails', {
     mockery::stub(token, 'httr::POST', list())

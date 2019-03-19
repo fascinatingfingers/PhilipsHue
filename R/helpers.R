@@ -15,15 +15,23 @@
 #'
 #' @export
 #'
-set_bridge_credentials <- function(ip, username) {
+set_bridge_credentials <- function(ip = Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME')) {
 
     # Check inputs
+    if (!(!is.null(ip) && is.character(ip) && length(ip) == 1L)) {
+        stop('`ip` must be a single character value')
+    }
+
+    if (!(!is.null(username) && is.character(username) && length(username) == 1L)) {
+        stop('`username` must be a single character value')
+    }
+
     if (length(ip) != 1L || !grepl('^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$', ip)) {
-        stop('Value for `ip` does not appear to be a valid IP address')
+        stop('Invalid value for `ip`')
     }
 
     if (length(username) != 1L || !grepl('^\\w{40}$', username)) {
-        stop('Value for `username` does not appear to be a valid Philips Hue API username')
+        stop('Invalid value for `username`')
     }
 
     # Prepare base URL

@@ -116,3 +116,39 @@ remote_button_press <- function(token) {
         stop('Remote button press faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }
+
+
+
+#' Whitelist your app and receive a username
+#'
+#' @param token token returned from [token()]
+#' @param app_id your app's ID (the name you registered your app under)
+#'
+#' @return Adds your app ID to the list of whitelisted apps on the user's bridge
+#'   and returns a username that can be used to authenticate future requests.
+#'
+#' @export
+app_username <- function(token, app_id) {
+    res <- httr::POST(
+        'https://api.meethue.com/bridge/',
+        httr::add_headers(Authorization = paste('Bearer', token)),
+        body = list(devicetype = app_id),
+        encode = 'json'
+    )
+
+    res_status <- tryCatch(
+        httr::status_code(res),
+        error = function(e) {NA}
+    )
+
+    res_content <- tryCatch(
+        httr::content(res, as = 'parsed'),
+        error = function(e) {list()}
+    )
+
+    if (res_status %in% 200 && 'success' %in% names(res_content[[1]])) {
+        return(res_content[[1]]$success$username)
+    } else {
+        stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
+    }
+}

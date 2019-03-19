@@ -17,6 +17,7 @@ URL: https://gitlab.com/fascinatingfingers/philipshue
 BugReports: 
     https://gitlab.com/fascinatingfingers/philipshue/issues
 Imports: 
+    base64enc,
     httr,
     methods,
     purrr,

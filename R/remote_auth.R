@@ -64,7 +64,10 @@ token <- function(auth_code, client_id, client_secret) {
         Authorization = base64enc::base64encode(charToRaw(paste(client_id, client_secret, sep = ':')))
     ))
 
-    res_status <- httr::status_code(res)
+    res_status <- tryCatch(
+        httr::status_code(res),
+        error = function(e) {NA}
+    )
 
     res_content <- tryCatch(
         httr::content(res, as = 'parsed'),

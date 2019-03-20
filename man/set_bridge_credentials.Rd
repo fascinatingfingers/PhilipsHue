@@ -5,7 +5,8 @@
 \alias{reset_bridge_credentials}
 \title{Hue Bridge Authentication}
 \usage{
-set_bridge_credentials(ip, username)
+set_bridge_credentials(ip = Sys.getenv("PHILIPS_HUE_BRIDGE_IP"),
+  username = Sys.getenv("PHILIPS_HUE_BRIDGE_USERNAME"))
 
 reset_bridge_credentials()
 }

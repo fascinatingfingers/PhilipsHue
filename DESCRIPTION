@@ -17,9 +17,12 @@ URL: https://gitlab.com/fascinatingfingers/philipshue
 BugReports: 
     https://gitlab.com/fascinatingfingers/philipshue/issues
 Imports: 
+    base64enc,
+    digest,
     httr,
     methods,
     purrr,
+    utils,
     yaml
 Suggests: 
     testthat

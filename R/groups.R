@@ -106,7 +106,31 @@ guess_room_class <- function(x) {
         'Garden',
         'Driveway',
         'Carport',
-        'Other'
+        'Other',
+
+        # Support starting 1.30
+        'Home',
+        'Downstairs',
+        'Upstairs',
+        'Top floor',
+        'Attic',
+        'Guest room',
+        'Staircase',
+        'Lounge',
+        'Man cave',
+        'Computer',
+        'Studio',
+        'Music',
+        'TV',
+        'Reading',
+        'Closet',
+        'Storage',
+        'Driveway',
+        'Laundry room',
+        'Balcony',
+        'Porch',
+        'Barbecue',
+        'Pool'
     )
 
     y <- room_classes[sapply(room_classes, grepl, x = x, ignore.case = TRUE)]

@@ -18,11 +18,11 @@ BugReports:
     https://gitlab.com/fascinatingfingers/philipshue/issues
 Imports: 
     base64enc,
+    digest,
     httr,
     methods,
     purrr,
     utils,
-    uuid,
     yaml
 Suggests: 
     testthat

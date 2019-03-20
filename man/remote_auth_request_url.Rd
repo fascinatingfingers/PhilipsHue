@@ -22,8 +22,8 @@ with Hue)}
 \item{state}{arbitrary data that will be included in the redirected response
 (see Details)
 
-When \code{state = NULL} (the default), a UUID will be generated. You can verify
-this value in the redirected response for an added layer of security.}
+When \code{state = NULL} (the default), a random hash will be generated. You can
+verify this value in the redirected response for an added layer of security.}
 }
 \value{
 Returns a URL to request remote access to a user's bridge.

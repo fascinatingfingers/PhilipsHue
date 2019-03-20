@@ -16,8 +16,8 @@
 #' @param state arbitrary data that will be included in the redirected response
 #'   (see Details)
 #'
-#' When `state = NULL` (the default), a UUID will be generated. You can verify
-#' this value in the redirected response for an added layer of security.
+#' When `state = NULL` (the default), a random hash will be generated. You can
+#' verify this value in the redirected response for an added layer of security.
 #'
 #' @return Returns a URL to request remote access to a user's bridge.
 #'
@@ -32,7 +32,7 @@ remote_auth_request_url <- function(
     bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'),
     state = NULL
 ) {
-    if (is.null(state)) {state <- gsub('-', '', uuid::UUIDgenerate())}
+    if (is.null(state)) {state <- digest::digest(stats::rnorm(1000))}
 
     sprintf(
         'https://api.meethue.com/oauth2/auth?clientid=%s&appid=%s&deviceid=%s&devicename=%s&state=%s&response_type=code',

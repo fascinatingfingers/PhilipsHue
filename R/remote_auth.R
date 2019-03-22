@@ -22,10 +22,10 @@
 #' @return Returns a URL to request remote access to a user's bridge.
 #'
 #' @examples
-#' remote_auth_request_url('client_id', 'app id', 'bridge_id', 'bridge name')
+#' authorize_at('client_id', 'app id', 'bridge_id', 'bridge name')
 #'
 #' @export
-remote_auth_request_url <- function(
+authorize_at <- function(
     client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
     app_id = Sys.getenv('PHILIPS_HUE_APP_ID'),
     bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
@@ -46,11 +46,11 @@ remote_auth_request_url <- function(
 
 #' Request authorization token
 #'
-#' After you obtain an authorization code (see [remote_auth_request_url()]), use
-#' the code to obtain an authorization token.
+#' After you obtain an authorization code (see [authorize_at()]), use the code
+#' to obtain an authorization token.
 #'
-#' @param auth_code authorization code sent to your app's callback URL
-#'   (see [remote_auth_request_url()])
+#' @param auth_code authorization code sent to your app's callback URL (see
+#'   [authorize_at()])
 #' @param client_id your app's client ID (assigned when you registered your app
 #'   with Hue)
 #' @param client_secret your app's client secret (assigned when you registered
@@ -60,7 +60,7 @@ remote_auth_request_url <- function(
 #'   expiration times
 #'
 #' @export
-token <- function(
+request_token <- function(
     auth_code = Sys.getenv('PHILIPS_HUE_AUTH_CODE'),
     client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
     client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
@@ -85,7 +85,7 @@ token <- function(
     )
 
     if (res_status %in% 200 && 'access_token' %in% names(res_content)) {
-        return(res_content$access_token)
+        return(res_content)
     } else {
         stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
@@ -93,16 +93,16 @@ token <- function(
 
 #' Remotely activate a button press on the user's bridge
 #'
-#' After obtaining an authorization token (see [token()]), the token can be
-#' used to remotely "press" the button on the Hue bridge as part of a remote
+#' After obtaining an authorization token (see [request_token()]), the token can
+#' be used to remotely "press" the button on the Hue bridge as part of a remote
 #' authentication sequence.
 #'
-#' @param token token returned from [token()]
+#' @param token token returned from [request_token()]
 #'
 #' @return Returns `TRUE` (invisibly) if the call was successful.
 #'
 #' @export
-remote_button_press <- function(token) {
+remote_auth <- function(token) {
     res <- httr::PUT(
         'https://api.meethue.com/bridge/0/config',
         httr::add_headers(Authorization = paste('Bearer', token)),
@@ -131,7 +131,7 @@ remote_button_press <- function(token) {
 
 #' Whitelist your app and receive a username
 #'
-#' @param token token returned from [token()]
+#' @param token token returned from [request_token()]
 #' @param app_id your app's ID (the name you registered your app under)
 #'
 #' @return Adds your app ID to the list of whitelisted apps on the user's bridge

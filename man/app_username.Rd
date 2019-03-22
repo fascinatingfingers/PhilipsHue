@@ -7,7 +7,7 @@
 app_username(token, app_id = Sys.getenv("PHILIPS_HUE_APP_ID"))
 }
 \arguments{
-\item{token}{token returned from \code{\link[=token]{token()}}}
+\item{token}{token returned from \code{\link[=request_token]{request_token()}}}
 
 \item{app_id}{your app's ID (the name you registered your app under)}
 }

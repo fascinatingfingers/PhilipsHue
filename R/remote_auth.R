@@ -162,3 +162,52 @@ app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID')) {
         stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }
+
+
+
+#' Refresh access token
+#'
+#' Tokens received by calling [request_token()] expire but can be refreshed by
+#' a simple call to [refresh_token()].
+#'
+#' @param refresh_token refresh token returned from [request_token()] (or
+#'   a subsequent [refresh_token()])
+#' @param client_id your app's client ID (assigned when you registered your app
+#'   with Hue)
+#' @param client_secret your app's client secret (assigned when you registered
+#'   your app with Hue)
+#'
+#' @return If successful, returns a list with authorization/refresh tokens and
+#'   expiration times
+#'
+#' @export
+refresh_token <- function(
+    refresh_token,
+    client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
+    client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
+) {
+    res <- httr::POST(
+        'https://api.meethue.com/oauth2/refresh?grant_type=refresh_token',
+        httr::add_headers(
+            Authorization = base64enc::base64encode(charToRaw(paste(client_id, client_secret, sep = ':')))
+        ),
+        body = list(refresh_token = refresh_token),
+        encode = 'form'
+    )
+
+    res_status <- tryCatch(
+        httr::status_code(res),
+        error = function(e) {NA}
+    )
+
+    res_content <- tryCatch(
+        httr::content(res, as = 'parsed'),
+        error = function(e) {list()}
+    )
+
+    if (res_status %in% 200) {
+        return(res_content)
+    } else {
+        stop('Token refresh faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
+    }
+}

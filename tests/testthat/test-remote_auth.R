@@ -70,3 +70,24 @@ test_that('`app_username` returns username if POST succeeds', {
 
     expect_identical(app_username('mock access token', 'mock_app_id'), 'mock username')
 })
+
+
+
+context('refresh_token')
+
+test_that('`refresh_token` throws error and prints parsed content if POST fails', {
+    mockery::stub(refresh_token, 'httr::POST', list())
+    mockery::stub(refresh_token, 'httr::status_code', 'mock status code')
+    mockery::stub(refresh_token, 'httr::content', list(errors = c('mock error 1')))
+
+    expect_error(refresh_token('mock refresh token', 'mock_app_id'), 'mock status code')
+    expect_error(refresh_token('mock refresh token', 'mock_app_id'), 'mock error 1')
+})
+
+test_that('`refresh_token` returns token if POST succeeds', {
+    mockery::stub(refresh_token, 'httr::POST', list())
+    mockery::stub(refresh_token, 'httr::status_code', 200)
+    mockery::stub(refresh_token, 'httr::content', list(access_token = 'mock access token'))
+
+    expect_identical(refresh_token('mock refresh code'), list(access_token = 'mock access token'))
+})

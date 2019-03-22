@@ -140,7 +140,7 @@ remote_auth <- function(token) {
 #' @export
 app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID')) {
     res <- httr::POST(
-        'https://api.meethue.com/bridge/',
+        'https://api.meethue.com/bridge',
         httr::add_headers(Authorization = paste('Bearer', token)),
         body = list(devicetype = app_id),
         encode = 'json'

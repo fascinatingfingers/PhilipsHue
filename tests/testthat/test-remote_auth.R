@@ -52,23 +52,23 @@ test_that('`remote_auth` returns TRUE if POST succeeds', {
 
 
 
-context('app_username')
+context('request_app_username')
 
-test_that('`app_username` throws error and prints parsed content if POST fails', {
-    mockery::stub(app_username, 'httr::POST', list())
-    mockery::stub(app_username, 'httr::status_code', 'mock status code')
-    mockery::stub(app_username, 'httr::content', list(errors = c('mock error 1')))
+test_that('`request_app_username` throws error and prints parsed content if POST fails', {
+    mockery::stub(request_app_username, 'httr::POST', list())
+    mockery::stub(request_app_username, 'httr::status_code', 'mock status code')
+    mockery::stub(request_app_username, 'httr::content', list(errors = c('mock error 1')))
 
-    expect_error(app_username('mock access token', 'mock_app_id'), 'mock status code')
-    expect_error(app_username('mock access token', 'mock_app_id'), 'mock error 1')
+    expect_error(request_app_username('mock access token', 'mock_app_id'), 'mock status code')
+    expect_error(request_app_username('mock access token', 'mock_app_id'), 'mock error 1')
 })
 
-test_that('`app_username` returns username if POST succeeds', {
-    mockery::stub(app_username, 'httr::POST', list())
-    mockery::stub(app_username, 'httr::status_code', 200)
-    mockery::stub(app_username, 'httr::content', list(list(success = list(username = 'mock username'))))
+test_that('`request_app_username` returns username if POST succeeds', {
+    mockery::stub(request_app_username, 'httr::POST', list())
+    mockery::stub(request_app_username, 'httr::status_code', 200)
+    mockery::stub(request_app_username, 'httr::content', list(list(success = list(username = 'mock username'))))
 
-    expect_identical(app_username('mock access token', 'mock_app_id'), 'mock username')
+    expect_identical(request_app_username('mock access token', 'mock_app_id'), 'mock username')
 })
 
 

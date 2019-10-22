@@ -10,8 +10,9 @@ before_script:
             export ENV=dev
         fi
 
-.tests: &tests
+check:
     stage: test
+    image: rocker/tidyverse
     script:
         - R CMD build . --no-build-vignettes --no-manual
         - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
@@ -21,15 +22,3 @@ before_script:
         when: on_failure
         paths:
             - ./*.Rcheck/00check.log
-
-check_dev:
-    <<: *tests
-    image: rocker/tidyverse
-    except:
-        - master
-
-check_prod:
-    <<: *tests
-    image: rocker/tidyverse
-    only:
-        - master

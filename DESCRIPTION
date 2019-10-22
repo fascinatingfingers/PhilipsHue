@@ -25,7 +25,9 @@ Imports:
     utils,
     yaml
 Suggests: 
-    testthat
+    mockery,
+    testthat,
+    withr
 Encoding: UTF-8
 Language: en-US
 LazyData: TRUE

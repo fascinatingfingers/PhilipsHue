@@ -26,7 +26,7 @@ Imports:
     yaml
 Suggests: 
     mockery,
-    testthat,
+    testthat (>= 2.1.0),
     withr
 Encoding: UTF-8
 Language: en-US

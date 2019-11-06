@@ -1,4 +1,6 @@
 
+# LOCAL AUTHENTICATION #########################################################
+
 #' Authentication -- local
 #'
 #' This function helps check and set the necessary environment variables to
@@ -49,6 +51,161 @@ auth_local <- function(
 }
 
 
+
+# REMOTE AUTHENTICATION ########################################################
+
+#' Authentication -- remote
+#'
+#' TODO
+#'
+#' @param app_id your app's ID (the name you registered your app under)
+#' @param client_id your app's client ID (assigned when you registered your app
+#'   with Hue)
+#' @param client_secret your app's client secret (assigned when you registered
+#'   your app with Hue)
+#' @param bridge_id ID of hue bridge you'd like remote access to
+#' @param bridge_name name of hue bridge you'd like remote access to
+#' @param username TODO
+#' @param access_token access token returned from [request_token()] (or a
+#'   subsequent [refresh_token()])
+#' @param access_token_exp access token expiration time returned from
+#'   [request_token()] (or a subsequent [refresh_token()])
+#' @param refresh_token refresh token returned from [request_token()] (or a
+#'   subsequent [refresh_token()])
+#' @param refresh_token_exp refresh token expiration time returned from
+#'   [request_token()] (or a subsequent [refresh_token()])
+#' @param interactive if `TRUE`, and initial app authorization is required,
+#'   [auth_remote()] will prompt the user to authorize the app and enter the
+#'   auth code
+#'
+#' @return Returns `TRUE` (invisibly) if options were successfully set
+#'
+#' @seealso <https://developers.meethue.com/develop/hue-api/remote-api-quick-start-guide/>
+#'
+#' @export
+auth_remote <- function(
+    app_id = Sys.getenv('PHILIPS_HUE_APP_ID'),
+    client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
+    client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'),
+    bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
+    bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'),
+    username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'),
+    access_token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'),
+    access_token_exp = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'),
+    refresh_token = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'),
+    refresh_token_exp = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'),
+    interactive = interactive()
+) {
+
+    if (username_valid(username)) {
+        Sys.setenv(PHILIPS_HUE_BRIDGE_USERNAME = as.character(username))
+
+        if (access_token_valid(access_token, access_token_exp)) {
+            Sys.setenv(
+                PHILIPS_HUE_ACCESS_TOKEN = as.character(access_token),
+                PHILIPS_HUE_ACCESS_TOKEN_EXP = as.character(access_token_exp)
+            )
+            return(invisible(TRUE))
+        } else {
+
+            if (client_valid(client_id, client_secret)) {
+                Sys.setenv(
+                    PHILIPS_HUE_CLIENT_ID = as.character(client_id),
+                    PHILIPS_HUE_CLIENT_SECRET = as.character(client_secret)
+                )
+            } else {
+                warning('Unable to obtain username. Check environment variables: PHILIPS_HUE_CLIENT_ID, PHILIPS_HUE_CLIENT_SECRET')
+            }
+
+            if (refresh_token_valid(refresh_token, refresh_token_exp)) {
+                token <- refresh_token(refresh_token, client_id, client_secret)
+
+                Sys.setenv(
+                    PHILIPS_HUE_ACCESS_TOKEN = as.character(token$access_token),
+                    PHILIPS_HUE_ACCESS_TOKEN_EXP = as.character(
+                        lubridate::now('UTC') +
+                        lubridate::seconds(as.numeric(token$access_token_expires_in))
+                    ),
+                    PHILIPS_HUE_REFRESH_TOKEN = as.character(token$refresh_token),
+                    PHILIPS_HUE_REFRESH_TOKEN_EXP = as.character(
+                        lubridate::now('UTC') +
+                        lubridate::seconds(as.numeric(token$refresh_token_expires_in))
+                    )
+                )
+
+                return(invisible(TRUE))
+            } else {
+
+            }
+        }
+
+
+    } else {
+        if (isTRUE(interactive)) {
+
+            if (client_valid(client_id, client_secret)) {
+                Sys.setenv(
+                    PHILIPS_HUE_CLIENT_ID = as.character(client_id),
+                    PHILIPS_HUE_CLIENT_SECRET = as.character(client_secret)
+                )
+            } else {
+                warning('Unable to obtain username. Check environment variables: PHILIPS_HUE_CLIENT_ID, PHILIPS_HUE_CLIENT_SECRET')
+            }
+
+            if (app_id_valid(app_id)) {
+                Sys.setenv(PHILIPS_HUE_APP_ID = as.character(app_id))
+            } else {
+                warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_APP_ID')
+            }
+
+            if (bridge_valid(bridge_id, bridge_name)) {
+                Sys.setenv(
+                    PHILIPS_HUE_BRIDGE_ID = as.character(bridge_id),
+                    PHILIPS_HUE_BRIDGE_NAME = as.character(bridge_name)
+                )
+            } else {
+                warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_BRIDGE_ID, PHILIPS_HUE_BRIDGE_NAME')
+            }
+
+            if (client_valid() && app_id_valid() && bridge_valid()) {
+                message('Visit the following site for an auth code:\n', authorize_at())
+
+                auth_code <- readline('Enter auth code: ')
+
+                token <- request_token(auth_code)
+
+                remote_auth(token$access_token)
+
+                username <- request_app_username(token$access_token)
+
+                Sys.setenv(
+                    PHILIPS_HUE_BRIDGE_USERNAME = as.character(username),
+                    PHILIPS_HUE_ACCESS_TOKEN = as.character(token$access_token),
+                    PHILIPS_HUE_ACCESS_TOKEN_EXP = as.character(
+                        lubridate::now('UTC') +
+                        lubridate::seconds(as.numeric(token$access_token_expires_in))
+                    ),
+                    PHILIPS_HUE_REFRESH_TOKEN = as.character(token$refresh_token),
+                    PHILIPS_HUE_REFRESH_TOKEN_EXP = as.character(
+                        lubridate::now('UTC') +
+                        lubridate::seconds(as.numeric(token$refresh_token_expires_in))
+                    )
+                )
+
+                return(invisible(TRUE))
+            } else {
+                return(invisible(FALSE))
+            }
+        } else {
+            warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_BRIDGE_NAME')
+            return(invisible(FALSE))
+        }
+    }
+}
+
+
+
+# REMOTE AUTH SEQUENCE #########################################################
 
 #' Request remote access to user's bridge
 #'
@@ -260,4 +417,88 @@ refresh_token <- function(
     } else {
         stop('Token refresh faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
+}
+
+
+
+# VALIDATORS ###################################################################
+
+app_id_valid <- function(
+    app_id = Sys.getenv('PHILIPS_HUE_APP_ID')
+) {
+    methods::hasArg(app_id) &&
+    is.character(app_id) &&
+    length(app_id) == 1L &&
+    grepl('\\w', app_id)
+}
+
+client_valid <- function(
+    client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
+    client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
+) {
+    methods::hasArg(client_id) &&
+    is.character(client_id) &&
+    length(client_id) == 1L &&
+    grepl('^\\w+$', client_id) &&
+
+    methods::hasArg(client_secret) &&
+    is.character(client_secret) &&
+    length(client_secret) == 1L &&
+    grepl('^\\w+$', client_secret)
+}
+
+username_valid <- function(
+    username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME')
+) {
+    methods::hasArg(username) &&
+    is.character(username) &&
+    length(username) == 1L &&
+    grepl('^[-A-Za-z0-9]+$', username)
+}
+
+access_token_valid <- function(
+    access_token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'),
+    access_token_exp = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP')
+) {
+    methods::hasArg(access_token) &&
+    is.character(access_token) &&
+    length(access_token) == 1L &&
+    grepl('^\\w+$', access_token) &&
+    methods::hasArg(access_token_exp) &&
+    length(access_token_exp) == 1L &&
+    (tryCatch(
+        as.POSIXct(access_token_exp, 'UTC'),
+        error = function(e) {lubridate::now('UTC') - lubridate::days(3)}
+    ) > lubridate::now('UTC')) %in% TRUE
+}
+
+refresh_token_valid <- function(
+    refresh_token = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'),
+    refresh_token_exp = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP')
+) {
+    methods::hasArg(refresh_token) &&
+    is.character(refresh_token) &&
+    length(refresh_token) == 1L &&
+    grepl('^\\w+$', refresh_token) &&
+    methods::hasArg(refresh_token_exp) &&
+    length(refresh_token_exp) == 1L &&
+    (tryCatch(
+        as.POSIXct(refresh_token_exp, 'UTC'),
+        error = function(e) {lubridate::now('UTC') - lubridate::days(3)}
+    ) > lubridate::now('UTC')) %in% TRUE
+}
+
+bridge_valid <- function(
+    bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
+    bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME')
+) {
+    methods::hasArg(bridge_id) &&
+    is.character(bridge_id) &&
+    length(bridge_id) == 1L &&
+    grepl('^\\w+$', bridge_id) &&
+
+    methods::hasArg(bridge_name) &&
+    is.character(bridge_name) &&
+    length(bridge_name) == 1L &&
+    grepl('\\w', bridge_name)
 }

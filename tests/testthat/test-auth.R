@@ -125,3 +125,146 @@ test_that('`refresh_token` returns token if POST succeeds', {
 
     expect_identical(refresh_token('mock refresh code'), list(access_token = 'mock access token'))
 })
+
+
+
+# VALIDATORS ###################################################################
+
+context('app_id_valid')
+
+test_that('app_id_valid() returns TRUE with valid inputs', {
+    expect_true(app_id_valid('MOCK APP ID'))
+})
+
+test_that('app_id_valid() returns FALSE with invalid inputs', {
+    expect_false(app_id_valid(NULL))
+    expect_false(app_id_valid(NA))
+    expect_false(app_id_valid(''))
+    expect_false(app_id_valid(pi))
+    expect_false(app_id_valid(letters))
+    expect_false(app_id_valid(iris))
+})
+
+
+
+context('client_valid')
+
+test_that('client_valid() returns TRUE with valid inputs', {
+    expect_true(client_valid('MOCK_CLIENT_ID', 'MOCK_CLIENT_SECRET'))
+})
+
+test_that('refresh_token_valid() returns FALSE with invalid inputs', {
+    expect_false(client_valid(NULL, 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid(NA, 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid('', 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid(pi, 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid(letters, 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid(iris, 'MOCK_CLIENT_SECRET'))
+    expect_false(client_valid('invalid token', 'MOCK_CLIENT_SECRET'))
+
+    expect_false(client_valid('MOCK_CLIENT_ID', NULL))
+    expect_false(client_valid('MOCK_CLIENT_ID', NA))
+    expect_false(client_valid('MOCK_CLIENT_ID', ''))
+    expect_false(client_valid('MOCK_CLIENT_ID', pi))
+    expect_false(client_valid('MOCK_CLIENT_ID', letters))
+    expect_false(client_valid('MOCK_CLIENT_ID', iris))
+    expect_false(client_valid('MOCK_CLIENT_ID', 'invalid token'))
+})
+
+
+
+context('username_valid')
+
+test_that('username_valid() returns TRUE with valid inputs', {
+    expect_true(username_valid('MOCK-USERNAME'))
+})
+
+test_that('username_valid() returns FALSE with invalid inputs', {
+    expect_false(username_valid(NULL))
+    expect_false(username_valid(NA))
+    expect_false(username_valid(''))
+    expect_false(username_valid(pi))
+    expect_false(username_valid(letters))
+    expect_false(username_valid(iris))
+})
+
+
+
+context('access_token_valid')
+
+test_that('access_token_valid() returns TRUE with valid inputs', {
+    expect_true(access_token_valid('MOCK_ACCESS_TOKEN', '9999-12-31 23:59:59'))
+    expect_true(access_token_valid('MOCK_ACCESS_TOKEN', as.POSIXct('9999-12-31 23:59:59')))
+})
+
+test_that('access_token_valid() returns FALSE with invalid inputs', {
+    expect_false(access_token_valid(NULL, '9999-12-31 23:59:59'))
+    expect_false(access_token_valid(NA, '9999-12-31 23:59:59'))
+    expect_false(access_token_valid('', '9999-12-31 23:59:59'))
+    expect_false(access_token_valid(pi, '9999-12-31 23:59:59'))
+    expect_false(access_token_valid(letters, '9999-12-31 23:59:59'))
+    expect_false(access_token_valid(iris, '9999-12-31 23:59:59'))
+    expect_false(access_token_valid('invalid token', '9999-12-31 23:59:59'))
+
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', NULL))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', NA))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', ''))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', pi))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', letters))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', iris))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', 'invalid exp'))
+    expect_false(access_token_valid('MOCK_ACCESS_TOKEN', '1970-01-01 00:00:00'))
+})
+
+
+
+context('refresh_token_valid')
+
+test_that('refresh_token_valid() returns TRUE with valid inputs', {
+    expect_true(refresh_token_valid('MOCK_REFRESH_TOKEN', '9999-12-31 23:59:59'))
+    expect_true(refresh_token_valid('MOCK_REFRESH_TOKEN', as.POSIXct('9999-12-31 23:59:59')))
+})
+
+test_that('refresh_token_valid() returns FALSE with invalid inputs', {
+    expect_false(refresh_token_valid(NULL, '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid(NA, '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid('', '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid(pi, '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid(letters, '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid(iris, '9999-12-31 23:59:59'))
+    expect_false(refresh_token_valid('invalid token', '9999-12-31 23:59:59'))
+
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', NULL))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', NA))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', ''))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', pi))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', letters))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', iris))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', 'invalid exp'))
+    expect_false(refresh_token_valid('MOCK_REFRESH_TOKEN', '1970-01-01 00:00:00'))
+})
+
+
+
+context('bridge_valid')
+
+test_that('bridge_valid() returns TRUE with valid inputs', {
+    expect_true(bridge_valid('MOCK_BRIDGE_ID', 'MOCK BRIDGE NAME'))
+})
+
+test_that('bridge_valid() returns FALSE with invalid inputs', {
+    expect_false(bridge_valid(NULL, 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid(NA, 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid('', 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid(pi, 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid(letters, 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid(iris, 'MOCK BRIDGE NAME'))
+    expect_false(bridge_valid('invalid bridge ID', 'MOCK BRIDGE NAME'))
+
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', NULL))
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', NA))
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', ''))
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', pi))
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', letters))
+    expect_false(bridge_valid('MOCK_BRIDGE_ID', iris))
+})

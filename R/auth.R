@@ -74,9 +74,9 @@ auth_local <- function(
 #'   subsequent [refresh_token()])
 #' @param refresh_token_exp refresh token expiration time returned from
 #'   [request_token()] (or a subsequent [refresh_token()])
-#' @param interactive if `TRUE`, and initial app authorization is required,
+#' @param initial_setup if `TRUE`, and initial app authorization is required,
 #'   [auth_remote()] will prompt the user to authorize the app and enter the
-#'   auth code
+#'   auth code manually
 #'
 #' @return Returns `TRUE` (invisibly) if options were successfully set
 #'
@@ -89,16 +89,17 @@ auth_remote <- function(
     client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'),
     bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
     bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'),
-    username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'),
+    username = Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'),
     access_token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'),
     access_token_exp = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'),
     refresh_token = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'),
     refresh_token_exp = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'),
-    interactive = interactive()
+    initial_setup = interactive()
 ) {
 
-    if (username_valid(username)) {
-        Sys.setenv(PHILIPS_HUE_BRIDGE_USERNAME = as.character(username))
+    # Check for a username
+    if (remote_username_valid(username)) {
+        Sys.setenv(PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = as.character(username))
 
         if (access_token_valid(access_token, access_token_exp)) {
             Sys.setenv(
@@ -135,13 +136,25 @@ auth_remote <- function(
 
                 return(invisible(TRUE))
             } else {
-
+                warning('Unable to obtain refresh token. Check environment variables: PHILIPS_HUE_REFRESH_TOKEN, PHILIPS_HUE_REFRESH_TOKEN_EXP')
+                return(invisible(FALSE))
             }
         }
 
 
+    # If there isn't a username...
     } else {
-        if (isTRUE(interactive)) {
+
+        ## and this is an interactive session...
+        if (isTRUE(initial_setup) && isTRUE(interactive())) {
+
+            ### then get the user to approve remote access for your app...
+
+            if (app_id_valid(app_id)) {
+                Sys.setenv(PHILIPS_HUE_APP_ID = as.character(app_id))
+            } else {
+                warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_APP_ID')
+            }
 
             if (client_valid(client_id, client_secret)) {
                 Sys.setenv(
@@ -152,22 +165,16 @@ auth_remote <- function(
                 warning('Unable to obtain username. Check environment variables: PHILIPS_HUE_CLIENT_ID, PHILIPS_HUE_CLIENT_SECRET')
             }
 
-            if (app_id_valid(app_id)) {
-                Sys.setenv(PHILIPS_HUE_APP_ID = as.character(app_id))
-            } else {
-                warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_APP_ID')
-            }
-
             if (bridge_valid(bridge_id, bridge_name)) {
                 Sys.setenv(
                     PHILIPS_HUE_BRIDGE_ID = as.character(bridge_id),
                     PHILIPS_HUE_BRIDGE_NAME = as.character(bridge_name)
                 )
             } else {
-                warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_BRIDGE_ID, PHILIPS_HUE_BRIDGE_NAME')
+                warning('Unable to obtain username. Check environment variables: PHILIPS_HUE_BRIDGE_ID, PHILIPS_HUE_BRIDGE_NAME')
             }
 
-            if (client_valid() && app_id_valid() && bridge_valid()) {
+            if (app_id_valid() && client_valid() && bridge_valid()) {
                 message('Visit the following site for an auth code:\n', authorize_at())
 
                 auth_code <- readline('Enter auth code: ')
@@ -179,7 +186,7 @@ auth_remote <- function(
                 username <- request_app_username(token$access_token)
 
                 Sys.setenv(
-                    PHILIPS_HUE_BRIDGE_USERNAME = as.character(username),
+                    PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = as.character(username),
                     PHILIPS_HUE_ACCESS_TOKEN = as.character(token$access_token),
                     PHILIPS_HUE_ACCESS_TOKEN_EXP = as.character(
                         lubridate::now('UTC') +
@@ -193,11 +200,18 @@ auth_remote <- function(
                 )
 
                 return(invisible(TRUE))
+
             } else {
+
                 return(invisible(FALSE))
+
             }
+
+        ## If this isn't an interactive session...
         } else {
-            warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_BRIDGE_NAME')
+
+            ### Warn and return FALSE
+            warning('Unable to obtain username. Check environment variable: PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
             return(invisible(FALSE))
         }
     }
@@ -447,8 +461,8 @@ client_valid <- function(
     grepl('^\\w+$', client_secret)
 }
 
-username_valid <- function(
-    username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME')
+remote_username_valid <- function(
+    username = Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
 ) {
     methods::hasArg(username) &&
     is.character(username) &&

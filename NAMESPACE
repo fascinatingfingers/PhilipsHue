@@ -2,6 +2,7 @@
 
 export(action)
 export(auth_local)
+export(auth_remote)
 export(authorize_at)
 export(condition)
 export(configure_daylight_sensor)

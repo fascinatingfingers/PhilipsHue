@@ -1,4 +1,6 @@
 
+# LOCAL AUTHENTICATION #########################################################
+
 context('auth_local')
 
 MOCK_CREDS_LOCAL <- c(
@@ -32,6 +34,325 @@ test_that('TRUE is returned upon success', {
 })
 
 
+
+# REMOTE AUTHENTICATION ########################################################
+
+context('auth_remote')
+
+test_that('{remote_username_valid():TRUE, access_token_valid():TRUE} sets env vars and returns TRUE', {
+    mockery::stub(auth_remote, 'remote_username_valid', TRUE)
+    mockery::stub(auth_remote, 'access_token_valid', TRUE)
+
+    ## passing arguments directly
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '')
+            expect_true(auth_remote(username = 'MOCK-USERNAME', access_token = 'MOCK_ACCESS_TOKEN', access_token_exp = '9999-12-31 23:59:59'))
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK-USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '9999-12-31 23:59:59')
+        }
+    )
+
+    ## passing arguments through env vars
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK-USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-12-31 23:59:59',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            expect_true(auth_remote())
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK-USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '9999-12-31 23:59:59')
+        }
+    )
+})
+
+test_that('{remote_username_valid():TRUE, access_token_valid():FALSE, client_valid():TRUE} sets env vars', {
+    mockery::stub(auth_remote, 'remote_username_valid', TRUE)
+    mockery::stub(auth_remote, 'access_token_valid', FALSE)
+    mockery::stub(auth_remote, 'client_valid', TRUE)
+
+    ## passing arguments directly
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), '')
+            suppressWarnings(auth_remote(client_id = 'MOCK_CLIENT_ID', client_secret = 'MOCK_CLIENT_SECRET'))
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+        }
+    )
+
+    ## passing arguments through env vars
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            suppressWarnings(auth_remote())
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+        }
+    )
+})
+
+test_that('{remote_username_valid():TRUE, access_token_valid():FALSE, client_valid():FALSE} warns to set client ID & secret', {
+    mockery::stub(auth_remote, 'remote_username_valid', TRUE)
+    mockery::stub(auth_remote, 'access_token_valid', FALSE)
+    mockery::stub(auth_remote, 'client_valid', FALSE)
+
+    expect_warning(auth_remote(), 'PHILIPS_HUE_CLIENT_ID')
+    expect_warning(auth_remote(), 'PHILIPS_HUE_CLIENT_SECRET')
+})
+
+test_that('{remote_username_valid():TRUE, access_token_valid():FALSE, refresh_token_valid():TRUE} refreshes token, sets env vars, and returns TRUE', {
+    mockery::stub(auth_remote, 'remote_username_valid', TRUE)
+    mockery::stub(auth_remote, 'access_token_valid', FALSE)
+    mockery::stub(auth_remote, 'refresh_token_valid', TRUE)
+    mockery::stub(auth_remote, 'lubridate::now', as.POSIXct('1970-01-01 00:00:00 UTC'))
+    mock_refresh_token <- mockery::mock(cycle = TRUE, list(
+        access_token = 'MOCK_ACCESS_TOKEN', access_token_expires_in = '10',
+        refresh_token = 'MOCK_REFRESH_TOKEN', refresh_token_expires_in = '11'
+    ))
+
+    ## passing arguments directly
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '')
+            expect_true(suppressWarnings(with_mock(
+                refresh_token = mock_refresh_token,
+                {auth_remote(refresh_token = 'MOCK_REFRESH_TOKEN', client_id = 'MOCK_CLIENT_ID', client_secret = 'MOCK_CLIENT_SECRET')}
+            )))
+            mockery::expect_args(mock_refresh_token, 1, refresh_token = 'MOCK_REFRESH_TOKEN', client_id = 'MOCK_CLIENT_ID', client_secret = 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '1970-01-01 00:00:10')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '1970-01-01 00:00:11')
+        }
+    )
+
+    ## passing arguments through env vars
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ORIG_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'MOCK_ORIG_ACCESS_TOKEN_EXP',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_ORIG_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'MOCK_ORIG_REFRESH_TOKEN_EXP'
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ORIG_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), 'MOCK_ORIG_ACCESS_TOKEN_EXP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_ORIG_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), 'MOCK_ORIG_REFRESH_TOKEN_EXP')
+            expect_true(suppressWarnings(with_mock(
+                refresh_token = mock_refresh_token,
+                {auth_remote()}
+            )))
+            mockery::expect_args(mock_refresh_token, 2, refresh_token = 'MOCK_ORIG_REFRESH_TOKEN', client_id = 'MOCK_CLIENT_ID', client_secret = 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '1970-01-01 00:00:10')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '1970-01-01 00:00:11')
+        }
+    )
+})
+
+test_that('{remote_username_valid():TRUE, access_token_valid():FALSE, refresh_token_valid():FALSE} refreshes token, sets env vars, and returns TRUE', {
+    mockery::stub(auth_remote, 'remote_username_valid', TRUE)
+    mockery::stub(auth_remote, 'access_token_valid', FALSE)
+    mockery::stub(auth_remote, 'refresh_token_valid', FALSE)
+
+    expect_warning(auth_remote(), 'PHILIPS_HUE_REFRESH_TOKEN')
+    expect_warning(auth_remote(), 'PHILIPS_HUE_REFRESH_TOKEN_EXP')
+    expect_false(suppressWarnings(auth_remote()))
+})
+
+test_that('{remote_username_valid():FALSE, interactive():TRUE, *_valid():TRUE} sets env vars', {
+    mockery::stub(auth_remote, 'remote_username_valid', FALSE)
+    mockery::stub(auth_remote, 'interactive', TRUE)
+    mockery::stub(auth_remote, 'app_id_valid', TRUE)
+    mockery::stub(auth_remote, 'client_valid', TRUE)
+    mockery::stub(auth_remote, 'bridge_valid', TRUE)
+
+    mock_authorize_at <- mockery::mock(cycle = TRUE, 'mock/auth/url')
+    mockery::stub(auth_remote, 'readline', 'MOCK_AUTH_CODE')
+    mock_request_token <- mockery::mock(cycle = TRUE, list(
+        access_token = 'MOCK_ACCESS_TOKEN', access_token_expires_in = '10',
+        refresh_token = 'MOCK_REFRESH_TOKEN', refresh_token_expires_in = '11'
+    ))
+    mock_remote_auth <- mockery::mock(cycle = TRUE, TRUE)
+    mock_request_app_username <- mockery::mock(cycle = TRUE, 'MOCK_REMOTE_USERNAME')
+    mockery::stub(auth_remote, 'lubridate::now', as.POSIXct('1970-01-01 00:00:00 UTC'))
+
+    ## passing arguments directly
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '')
+            expect_true(
+                with_mock(
+                    authorize_at = mock_authorize_at,
+                    request_token = mock_request_token,
+                    remote_auth = mock_remote_auth,
+                    request_app_username = mock_request_app_username,
+                    {
+                        auth_remote(
+                            app_id = 'MOCK_PHILIPS_HUE_APP_ID',
+                            client_id = 'MOCK_PHILIPS_HUE_CLIENT_ID', client_secret = 'MOCK_PHILIPS_HUE_CLIENT_SECRET',
+                            bridge_id = 'MOCK_PHILIPS_HUE_BRIDGE_ID', bridge_name = 'MOCK_PHILIPS_HUE_BRIDGE_NAME',
+                            initial_setup = TRUE
+                        )
+                    }
+                )
+            )
+            mockery::expect_called(mock_authorize_at, 1)
+            mockery::expect_args(mock_request_token, 1, auth_code = 'MOCK_AUTH_CODE')
+            mockery::expect_args(mock_remote_auth, 1, token = 'MOCK_ACCESS_TOKEN')
+            mockery::expect_args(mock_request_app_username, 1, token = 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_PHILIPS_HUE_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_PHILIPS_HUE_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_PHILIPS_HUE_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_PHILIPS_HUE_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_PHILIPS_HUE_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '1970-01-01 00:00:10')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '1970-01-01 00:00:11')
+        }
+    )
+
+    ## passing arguments through env vars
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_PHILIPS_HUE_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_PHILIPS_HUE_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_PHILIPS_HUE_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_PHILIPS_HUE_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK_PHILIPS_HUE_BRIDGE_NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_ORIG_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ORIG_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'MOCK_ORIG_ACCESS_TOKEN_EXP',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_ORIG_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'MOCK_ORIG_REFRESH_TOKEN_EXP'
+        ),
+        {
+            expect_true(
+                with_mock(
+                    authorize_at = mock_authorize_at,
+                    request_token = mock_request_token,
+                    remote_auth = mock_remote_auth,
+                    request_app_username = mock_request_app_username,
+                    {auth_remote(initial_setup = TRUE)}
+                )
+            )
+            mockery::expect_called(mock_authorize_at, 2)
+            mockery::expect_args(mock_request_token, 2, auth_code = 'MOCK_AUTH_CODE')
+            mockery::expect_args(mock_remote_auth, 2, token = 'MOCK_ACCESS_TOKEN')
+            mockery::expect_args(mock_request_app_username, 2, token = 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_PHILIPS_HUE_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_PHILIPS_HUE_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_PHILIPS_HUE_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_PHILIPS_HUE_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_PHILIPS_HUE_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '1970-01-01 00:00:10')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '1970-01-01 00:00:11')
+        }
+    )
+})
+
+
+
+# REMOTE AUTH SEQUENCE #########################################################
 
 context('authorize_at')
 
@@ -173,19 +494,19 @@ test_that('refresh_token_valid() returns FALSE with invalid inputs', {
 
 
 
-context('username_valid')
+context('remote_username_valid')
 
-test_that('username_valid() returns TRUE with valid inputs', {
-    expect_true(username_valid('MOCK-USERNAME'))
+test_that('remote_username_valid() returns TRUE with valid inputs', {
+    expect_true(remote_username_valid('MOCK-USERNAME'))
 })
 
-test_that('username_valid() returns FALSE with invalid inputs', {
-    expect_false(username_valid(NULL))
-    expect_false(username_valid(NA))
-    expect_false(username_valid(''))
-    expect_false(username_valid(pi))
-    expect_false(username_valid(letters))
-    expect_false(username_valid(iris))
+test_that('remote_username_valid() returns FALSE with invalid inputs', {
+    expect_false(remote_username_valid(NULL))
+    expect_false(remote_username_valid(NA))
+    expect_false(remote_username_valid(''))
+    expect_false(remote_username_valid(pi))
+    expect_false(remote_username_valid(letters))
+    expect_false(remote_username_valid(iris))
 })
 
 

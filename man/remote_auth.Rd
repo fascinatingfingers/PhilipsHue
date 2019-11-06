@@ -4,7 +4,7 @@
 \alias{remote_auth}
 \title{Remotely activate a button press on the user's bridge}
 \usage{
-remote_auth(token)
+remote_auth(token = Sys.getenv("PHILIPS_HUE_ACCESS_TOKEN"))
 }
 \arguments{
 \item{token}{token returned from \code{\link[=request_token]{request_token()}}}

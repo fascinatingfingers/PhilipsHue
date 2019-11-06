@@ -153,7 +153,7 @@ request_token <- function(
 #' @return Returns `TRUE` (invisibly) if the call was successful.
 #'
 #' @export
-remote_auth <- function(token) {
+remote_auth <- function(token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN')) {
     res <- httr::PUT(
         'https://api.meethue.com/bridge/0/config',
         httr::add_headers(Authorization = paste('Bearer', token)),
@@ -187,7 +187,10 @@ remote_auth <- function(token) {
 #'   and returns a username that can be used to authenticate future requests.
 #'
 #' @export
-request_app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID')) {
+request_app_username <- function(
+    token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'),
+    app_id = Sys.getenv('PHILIPS_HUE_APP_ID')
+) {
     res <- httr::POST(
         'https://api.meethue.com/bridge',
         httr::add_headers(Authorization = paste('Bearer', token)),
@@ -229,7 +232,7 @@ request_app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID'
 #'
 #' @export
 refresh_token <- function(
-    refresh_token,
+    refresh_token = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'),
     client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
     client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
 ) {

@@ -4,7 +4,7 @@
 \alias{refresh_token}
 \title{Refresh access token}
 \usage{
-refresh_token(refresh_token,
+refresh_token(refresh_token = Sys.getenv("PHILIPS_HUE_REFRESH_TOKEN"),
   client_id = Sys.getenv("PHILIPS_HUE_CLIENT_ID"),
   client_secret = Sys.getenv("PHILIPS_HUE_CLIENT_SECRET"))
 }

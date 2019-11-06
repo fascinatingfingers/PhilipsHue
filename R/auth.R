@@ -12,7 +12,10 @@
 #' @seealso <https://www.developers.meethue.com/documentation/getting-started>
 #'
 #' @export
-auth_local <- function(ip = Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME')) {
+auth_local <- function(
+    ip = Sys.getenv('PHILIPS_HUE_BRIDGE_IP'),
+    username = Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME')
+) {
 
     # Check inputs
     if (!(!is.null(ip) && is.character(ip) && length(ip) == 1L)) {
@@ -92,8 +95,6 @@ authorize_at <- function(
     )
 }
 
-
-
 #' Request authorization token
 #'
 #' After you obtain an authorization code (see [authorize_at()]), use the code
@@ -140,8 +141,6 @@ request_token <- function(
         stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }
-
-
 
 #' Remotely activate a button press on the user's bridge
 #'
@@ -212,8 +211,6 @@ request_app_username <- function(token, app_id = Sys.getenv('PHILIPS_HUE_APP_ID'
         stop('Token request faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
     }
 }
-
-
 
 #' Refresh access token
 #'

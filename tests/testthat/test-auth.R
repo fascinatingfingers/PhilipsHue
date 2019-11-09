@@ -662,6 +662,146 @@ test_that('`refresh_token` returns token if POST succeeds', {
 
 
 
+# AUTH RESETTERS ###############################################################
+
+context('reset_auth')
+
+test_that('`reset_auth` resets local and/or remote auth', {
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = 'MOCK_BRIDGE_IP',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'MOCK_BRIDGE_USERNAME',
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK_BRIDGE_NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'MOCK_ACCESS_TOKEN_EXP',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'MOCK_REFRESH_TOKEN_EXP'
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), 'MOCK_BRIDGE_IP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), 'MOCK_BRIDGE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_BRIDGE_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), 'MOCK_ACCESS_TOKEN_EXP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), 'MOCK_REFRESH_TOKEN_EXP')
+            expect_true(reset_auth())
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '')
+        }
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = 'MOCK_BRIDGE_IP',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'MOCK_BRIDGE_USERNAME',
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK_BRIDGE_NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'MOCK_ACCESS_TOKEN_EXP',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'MOCK_REFRESH_TOKEN_EXP'
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), 'MOCK_BRIDGE_IP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), 'MOCK_BRIDGE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_BRIDGE_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), 'MOCK_ACCESS_TOKEN_EXP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), 'MOCK_REFRESH_TOKEN_EXP')
+            expect_true(reset_auth(local = TRUE, remote = FALSE))
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_BRIDGE_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), 'MOCK_ACCESS_TOKEN_EXP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), 'MOCK_REFRESH_TOKEN_EXP')
+        }
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = 'MOCK_BRIDGE_IP',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'MOCK_BRIDGE_USERNAME',
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK_BRIDGE_NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'MOCK_ACCESS_TOKEN_EXP',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'MOCK_REFRESH_TOKEN_EXP'
+        ),
+        {
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), 'MOCK_BRIDGE_IP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), 'MOCK_BRIDGE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), 'MOCK_APP_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), 'MOCK_CLIENT_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), 'MOCK_CLIENT_SECRET')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), 'MOCK_BRIDGE_ID')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), 'MOCK_BRIDGE_NAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), 'MOCK_BRIDGE_REMOTE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), 'MOCK_ACCESS_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), 'MOCK_ACCESS_TOKEN_EXP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), 'MOCK_REFRESH_TOKEN')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), 'MOCK_REFRESH_TOKEN_EXP')
+            expect_true(reset_auth(local = FALSE, remote = TRUE))
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_IP'), 'MOCK_BRIDGE_IP')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'), 'MOCK_BRIDGE_USERNAME')
+            expect_equal(Sys.getenv('PHILIPS_HUE_APP_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_CLIENT_SECRET'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_ID'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_NAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'), '')
+            expect_equal(Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'), '')
+        }
+    )
+})
+
+
+
 # VALIDATORS ###################################################################
 
 context('app_id_valid')

@@ -435,6 +435,46 @@ refresh_token <- function(
 
 
 
+# AUTH RESETTERS ###############################################################
+
+#' Reset authentication environment variables
+#'
+#' @param local if `TRUE`, resets environment variables required for local
+#'   authentication
+#' @param remote if `TRUE`, resets environment variables required for remote
+#'   authentication
+#'
+#' @return Returns `TRUE` invisibly upon success
+#'
+#' @export
+reset_auth <- function(local = TRUE, remote = TRUE) {
+    if (isTRUE(local)) {
+        Sys.setenv(
+            PHILIPS_HUE_BRIDGE_IP = '',
+            PHILIPS_HUE_BRIDGE_USERNAME = ''
+        )
+    }
+
+    if (isTRUE(remote)) {
+        Sys.setenv(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        )
+    }
+
+    return(invisible(TRUE))
+}
+
+
+
 # VALIDATORS ###################################################################
 
 app_id_valid <- function(

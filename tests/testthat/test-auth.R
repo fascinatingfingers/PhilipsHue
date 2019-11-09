@@ -377,6 +377,21 @@ test_that('`request_token` throws error and prints parsed content if POST fails'
     expect_error(request_token('mock auth code'), 'mock error 1')
 })
 
+test_that('`request_token` throws error and prints parsed content if POST fails due to httr::content failure', {
+    mockery::stub(request_token, 'httr::POST', list())
+    mockery::stub(request_token, 'httr::status_code', 'mock status code')
+
+    expect_error(request_token('mock auth code'), 'mock status code')
+    expect_error(
+        with_mock(
+            content = function(...) {stop('httr::content mock error')},
+            .env = 'httr',
+            request_token('mock auth code')
+        ),
+        'httr::content mock error'
+    )
+})
+
 test_that('`request_token` returns token if POST succeeds', {
     mockery::stub(request_token, 'httr::POST', list())
     mockery::stub(request_token, 'httr::status_code', 200)
@@ -396,6 +411,21 @@ test_that('`remote_auth` throws error and prints parsed content if POST fails', 
 
     expect_error(remote_auth('mock access token'), 'mock status code')
     expect_error(remote_auth('mock access token'), 'mock error 1')
+})
+
+test_that('`remote_auth` throws error and prints parsed content if POST fails due to httr::content failure', {
+    mockery::stub(remote_auth, 'httr::PUT', list())
+    mockery::stub(remote_auth, 'httr::status_code', 'mock status code')
+
+    expect_error(remote_auth('mock access token'), 'mock status code')
+    expect_error(
+        with_mock(
+            content = function(...) {stop('httr::content mock error')},
+            .env = 'httr',
+            remote_auth('mock access token')
+        ),
+        'httr::content mock error'
+    )
 })
 
 test_that('`remote_auth` returns TRUE if POST succeeds', {
@@ -418,6 +448,21 @@ test_that('`request_app_username` throws error and prints parsed content if POST
     expect_error(request_app_username('mock access token', 'mock_app_id'), 'mock error 1')
 })
 
+test_that('`request_app_username` throws error and prints parsed content if POST fails due to httr::content failure', {
+    mockery::stub(request_app_username, 'httr::POST', list())
+    mockery::stub(request_app_username, 'httr::status_code', 'mock status code')
+
+    expect_error(request_app_username('mock access token', 'mock_app_id'), 'mock status code')
+    expect_error(
+        with_mock(
+            content = function(...) {stop('httr::content mock error')},
+            .env = 'httr',
+            request_app_username('mock access token', 'mock_app_id')
+        ),
+        'httr::content mock error'
+    )
+})
+
 test_that('`request_app_username` returns username if POST succeeds', {
     mockery::stub(request_app_username, 'httr::POST', list())
     mockery::stub(request_app_username, 'httr::status_code', 200)
@@ -437,6 +482,21 @@ test_that('`refresh_token` throws error and prints parsed content if POST fails'
 
     expect_error(refresh_token('mock refresh token', 'mock_app_id'), 'mock status code')
     expect_error(refresh_token('mock refresh token', 'mock_app_id'), 'mock error 1')
+})
+
+test_that('`refresh_token` throws error and prints parsed content if POST fails due to httr::content failure', {
+    mockery::stub(refresh_token, 'httr::POST', list())
+    mockery::stub(refresh_token, 'httr::status_code', 'mock status code')
+
+    expect_error(refresh_token('mock refresh token', 'mock_app_id'), 'mock status code')
+    expect_error(
+        with_mock(
+            content = function(...) {stop('httr::content mock error')},
+            .env = 'httr',
+            refresh_token('mock refresh token', 'mock_app_id')
+        ),
+        'httr::content mock error'
+    )
 })
 
 test_that('`refresh_token` returns token if POST succeeds', {

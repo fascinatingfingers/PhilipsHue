@@ -303,7 +303,7 @@ request_token <- function(
 
     res_content <- tryCatch(
         httr::content(res, as = 'parsed'),
-        error = function(e) {list()}
+        error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
     if (res_status %in% 200 && 'access_token' %in% names(res_content)) {
@@ -342,7 +342,7 @@ remote_auth <- function(token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN')) {
     } else {
         res_content <- tryCatch(
             httr::content(res, as = 'parsed'),
-            error = function(e) {list()}
+            error = function(e) {list(`httr::content error` = as.character(e))}
         )
 
         stop('Remote button press faild with status code: ', res_status, ':\n', yaml::as.yaml(res_content))
@@ -376,7 +376,7 @@ request_app_username <- function(
 
     res_content <- tryCatch(
         httr::content(res, as = 'parsed'),
-        error = function(e) {list()}
+        error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
     if (res_status %in% 200 && 'success' %in% names(res_content[[1]])) {
@@ -423,7 +423,7 @@ refresh_token <- function(
 
     res_content <- tryCatch(
         httr::content(res, as = 'parsed'),
-        error = function(e) {list()}
+        error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
     if (res_status %in% 200) {

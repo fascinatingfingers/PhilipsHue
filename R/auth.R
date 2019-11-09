@@ -440,7 +440,7 @@ refresh_token <- function(
 app_id_valid <- function(
     app_id = Sys.getenv('PHILIPS_HUE_APP_ID')
 ) {
-    methods::hasArg(app_id) &&
+    (methods::hasArg(app_id) || !is.null(app_id)) &&
     is.character(app_id) &&
     length(app_id) == 1L &&
     grepl('\\w', app_id)
@@ -450,12 +450,12 @@ client_valid <- function(
     client_id = Sys.getenv('PHILIPS_HUE_CLIENT_ID'),
     client_secret = Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')
 ) {
-    methods::hasArg(client_id) &&
+    (methods::hasArg(client_id) || !is.null(client_id)) &&
     is.character(client_id) &&
     length(client_id) == 1L &&
     grepl('^\\w+$', client_id) &&
 
-    methods::hasArg(client_secret) &&
+    (methods::hasArg(client_secret) || !is.null(client_secret)) &&
     is.character(client_secret) &&
     length(client_secret) == 1L &&
     grepl('^\\w+$', client_secret)
@@ -464,7 +464,7 @@ client_valid <- function(
 remote_username_valid <- function(
     username = Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
 ) {
-    methods::hasArg(username) &&
+    (methods::hasArg(username) || !is.null(username)) &&
     is.character(username) &&
     length(username) == 1L &&
     grepl('^[-A-Za-z0-9]+$', username)
@@ -474,11 +474,11 @@ access_token_valid <- function(
     access_token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN'),
     access_token_exp = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP')
 ) {
-    methods::hasArg(access_token) &&
+    (methods::hasArg(access_token) || !is.null(access_token)) &&
     is.character(access_token) &&
     length(access_token) == 1L &&
     grepl('^\\w+$', access_token) &&
-    methods::hasArg(access_token_exp) &&
+    (methods::hasArg(access_token_exp) || !is.null(access_token_exp)) &&
     length(access_token_exp) == 1L &&
     (tryCatch(
         as.POSIXct(access_token_exp, 'UTC'),
@@ -490,11 +490,11 @@ refresh_token_valid <- function(
     refresh_token = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN'),
     refresh_token_exp = Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP')
 ) {
-    methods::hasArg(refresh_token) &&
+    (methods::hasArg(refresh_token) || !is.null(refresh_token)) &&
     is.character(refresh_token) &&
     length(refresh_token) == 1L &&
     grepl('^\\w+$', refresh_token) &&
-    methods::hasArg(refresh_token_exp) &&
+    (methods::hasArg(refresh_token_exp) || !is.null(refresh_token_exp)) &&
     length(refresh_token_exp) == 1L &&
     (tryCatch(
         as.POSIXct(refresh_token_exp, 'UTC'),
@@ -506,12 +506,12 @@ bridge_valid <- function(
     bridge_id = Sys.getenv('PHILIPS_HUE_BRIDGE_ID'),
     bridge_name = Sys.getenv('PHILIPS_HUE_BRIDGE_NAME')
 ) {
-    methods::hasArg(bridge_id) &&
+    (methods::hasArg(bridge_id) || !is.null(bridge_id)) &&
     is.character(bridge_id) &&
     length(bridge_id) == 1L &&
     grepl('^\\w+$', bridge_id) &&
 
-    methods::hasArg(bridge_name) &&
+    (methods::hasArg(bridge_name) || !is.null(bridge_name)) &&
     is.character(bridge_name) &&
     length(bridge_name) == 1L &&
     grepl('\\w', bridge_name)

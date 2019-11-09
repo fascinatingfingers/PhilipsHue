@@ -350,6 +350,159 @@ test_that('{remote_username_valid():FALSE, interactive():TRUE, *_valid():TRUE} s
     )
 })
 
+test_that('{remote_username_valid():FALSE, interactive():TRUE, *_valid():FALSE} returns FALSE with warnings', {
+    mockery::stub(auth_remote, 'remote_username_valid', FALSE)
+    mockery::stub(auth_remote, 'interactive', TRUE)
+
+    # app_id_valid(): FALSE
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {TRUE},
+            bridge_valid = function(...) {TRUE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_APP_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    # client_valid(): FALSE
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {TRUE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {TRUE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_CLIENT_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {TRUE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {TRUE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_CLIENT_SECRET'
+    )
+    expect_false(y)
+    rm(y)
+
+    # bridge_valid(): FALSE
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {TRUE},
+            client_valid = function(...) {TRUE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_BRIDGE_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {TRUE},
+            client_valid = function(...) {TRUE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_BRIDGE_NAME'
+    )
+    expect_false(y)
+    rm(y)
+
+    # app_id_valid(): FALSE, client_valid(): FALSE
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_APP_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_CLIENT_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_CLIENT_SECRET'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_BRIDGE_ID'
+    )
+    expect_false(y)
+    rm(y)
+
+    expect_warning(
+        y <- with_mock(
+            app_id_valid = function(...) {FALSE},
+            client_valid = function(...) {FALSE},
+            bridge_valid = function(...) {FALSE},
+            .env = 'PhilipsHue',
+            auth_remote()
+        ),
+        'PHILIPS_HUE_BRIDGE_NAME'
+    )
+    expect_false(y)
+    rm(y)
+})
+
+test_that('{remote_username_valid():FALSE, interactive():TRUE, *_valid():FALSE} returns FALSE with warnings', {
+    mockery::stub(auth_remote, 'remote_username_valid', FALSE)
+    mockery::stub(auth_remote, 'interactive', FALSE)
+
+    expect_warning(y <- auth_remote(), 'PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
+    expect_false(y)
+
+    expect_warning(y <- auth_remote(initial_setup = FALSE), 'PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
+    expect_false(y)
+
+    expect_warning(y <- auth_remote(initial_setup = TRUE), 'PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')
+    expect_false(y)
+})
+
 
 
 # REMOTE AUTH SEQUENCE #########################################################

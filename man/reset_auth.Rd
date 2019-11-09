@@ -2,7 +2,7 @@
 % Please edit documentation in R/auth.R
 \name{reset_auth}
 \alias{reset_auth}
-\title{Reset}
+\title{Reset authentication environment variables}
 \usage{
 reset_auth(local = TRUE, remote = TRUE)
 }
@@ -17,5 +17,5 @@ authentication}
 Returns \code{TRUE} invisibly upon success
 }
 \description{
-Reset
+Reset authentication environment variables
 }

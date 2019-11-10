@@ -942,3 +942,359 @@ test_that('bridge_valid() returns FALSE with invalid inputs', {
     expect_false(bridge_valid('MOCK_BRIDGE_ID', letters))
     expect_false(bridge_valid('MOCK_BRIDGE_ID', iris))
 })
+
+
+
+context('has_local_auth')
+
+test_that('has_local_auth() returns TRUE with proper env vars and FALSE otherwise', {
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = '0.0.0.0',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        ),
+        expect_true(has_local_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = '',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        ),
+        expect_false(has_local_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = '0.0.0.0',
+            PHILIPS_HUE_BRIDGE_USERNAME = ''
+        ),
+        expect_false(has_local_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = 'invalid IP address',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+        ),
+        expect_false(has_local_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_BRIDGE_IP = '0.0.0.0',
+            PHILIPS_HUE_BRIDGE_USERNAME = 'invalid username'
+        ),
+        expect_false(has_local_auth())
+    )
+})
+
+
+
+context('has_remote_auth')
+
+test_that('has_remote_auth() returns TRUE with proper env vars and FALSE otherwise', {
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_true(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = '',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = '',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'invalid MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = '',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'invalid MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = '',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'invalid MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = '',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = '',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'invalid MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = '',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'invalid MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = 'invalid 9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = '',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'invalid MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = '9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = ''
+        ),
+        expect_false(has_remote_auth())
+    )
+
+    withr::with_envvar(
+        c(
+            PHILIPS_HUE_APP_ID = 'MOCK_APP_ID',
+            PHILIPS_HUE_CLIENT_ID = 'MOCK_CLIENT_ID',
+            PHILIPS_HUE_CLIENT_SECRET = 'MOCK_CLIENT_SECRET',
+            PHILIPS_HUE_BRIDGE_ID = 'MOCK_BRIDGE_ID',
+            PHILIPS_HUE_BRIDGE_NAME = 'MOCK BRIDGE NAME',
+            PHILIPS_HUE_BRIDGE_REMOTE_USERNAME = 'MOCK_BRIDGE_REMOTE_USERNAME',
+            PHILIPS_HUE_ACCESS_TOKEN = 'MOCK_ACCESS_TOKEN',
+            PHILIPS_HUE_ACCESS_TOKEN_EXP = '9999-01-01 00:00:00',
+            PHILIPS_HUE_REFRESH_TOKEN = 'MOCK_REFRESH_TOKEN',
+            PHILIPS_HUE_REFRESH_TOKEN_EXP = 'invalid 9999-12-31 23:59:59'
+        ),
+        expect_false(has_remote_auth())
+    )
+})

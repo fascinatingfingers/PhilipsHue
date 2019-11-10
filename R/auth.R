@@ -556,3 +556,23 @@ bridge_valid <- function(
     length(bridge_name) == 1L &&
     grepl('\\w', bridge_name)
 }
+
+has_local_auth <- function() {
+    grepl('^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$', Sys.getenv('PHILIPS_HUE_BRIDGE_IP')) &
+    grepl('^\\w{40}$', Sys.getenv('PHILIPS_HUE_BRIDGE_USERNAME'))
+}
+
+has_remote_auth <- function() {
+    grepl('\\w+', Sys.getenv('PHILIPS_HUE_APP_ID')) &
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_CLIENT_ID')) &
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_CLIENT_SECRET')) &
+
+    grepl('\\w+', Sys.getenv('PHILIPS_HUE_BRIDGE_NAME')) &
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_BRIDGE_ID')) &
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_BRIDGE_REMOTE_USERNAME')) &
+
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN')) &
+    grepl('^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$', Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN_EXP')) &
+    grepl('^\\w+$', Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN')) &
+    grepl('^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$', Sys.getenv('PHILIPS_HUE_REFRESH_TOKEN_EXP'))
+}

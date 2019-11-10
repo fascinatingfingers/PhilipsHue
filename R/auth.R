@@ -302,7 +302,7 @@ request_token <- function(
     )
 
     res_content <- tryCatch(
-        httr::content(res, as = 'parsed'),
+        httr::content(res, as = 'parsed', encoding = 'UTF-8'),
         error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
@@ -341,7 +341,7 @@ remote_auth <- function(token = Sys.getenv('PHILIPS_HUE_ACCESS_TOKEN')) {
         return(invisible(TRUE))
     } else {
         res_content <- tryCatch(
-            httr::content(res, as = 'parsed'),
+            httr::content(res, as = 'parsed', encoding = 'UTF-8'),
             error = function(e) {list(`httr::content error` = as.character(e))}
         )
 
@@ -375,7 +375,7 @@ request_app_username <- function(
     )
 
     res_content <- tryCatch(
-        httr::content(res, as = 'parsed'),
+        httr::content(res, as = 'parsed', encoding = 'UTF-8'),
         error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
@@ -422,7 +422,7 @@ refresh_token <- function(
     )
 
     res_content <- tryCatch(
-        httr::content(res, as = 'parsed'),
+        httr::content(res, as = 'parsed', encoding = 'UTF-8'),
         error = function(e) {list(`httr::content error` = as.character(e))}
     )
 
